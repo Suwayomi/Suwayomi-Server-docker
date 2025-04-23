@@ -1,4 +1,4 @@
-FROM eclipse-temurin:21.0.6_7-jre-noble
+FROM eclipse-temurin:21.0.7_6-jre-noble
 
 ARG BUILD_DATE
 ARG TACHIDESK_RELEASE_TAG
