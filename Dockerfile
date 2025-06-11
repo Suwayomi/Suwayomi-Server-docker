@@ -68,9 +68,8 @@ EXPOSE 4567
 
 # Ubuntu exposes libgluegen_rt.so as libgluegen2_rt.so for some reason, so rename it
 # JCEF (or Java?) also does not search /usr/lib/jni, so copy them over into one it will search
-RUN mkdir -p natives/linux-amd64 && \
-    cp /usr/lib/jni/libgluegen2_rt.so natives/linux-amd64/libgluegen_rt.so && \
-    cp /usr/lib/jni/*.so natives/linux-amd64/
+RUN cp /usr/lib/jni/libgluegen2_rt.so libgluegen_rt.so && \
+    cp /usr/lib/jni/*.so ./
 
 CMD ["/home/suwayomi/startup_script.sh"]
 
