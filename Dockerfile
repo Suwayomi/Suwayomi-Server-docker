@@ -33,10 +33,18 @@ RUN apt-get update && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
+# install CEF dependencies
+RUN apt-get update && \
+    apt-get -y install --no-install-recommends -y libxss1 libxext6 libxrender1 libxcomposite1 libxdamage1 libxkbcommon0 libxtst6 \
+        libjogl2-jni libgluegen2-jni libglib2.0-0t64 libnss3 libdbus-1-3 libpango-1.0-0 libcairo2 libasound2t64 \
+        libatk-bridge2.0-0t64 libcups2t64 libdrm2 libgbm1 xvfb && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+
 # Create a user to run as
 RUN userdel -r ubuntu
 RUN groupadd --gid 1000 suwayomi && \
-    useradd  --uid 1000 --gid suwayomi --no-log-init suwayomi && \
+    useradd  --uid 1000 --gid suwayomi --no-log-init -G audio,video suwayomi && \
     mkdir -p /home/suwayomi/.local/share/Tachidesk
 
 WORKDIR /home/suwayomi
@@ -52,8 +60,18 @@ COPY scripts/startup_script.sh /home/suwayomi/startup_script.sh
 RUN chown -R suwayomi:suwayomi /home/suwayomi && \
     chmod 777 -R /home/suwayomi
 
+# must be created by root
+RUN mkdir /tmp/.X11-unix && chmod 1777 /tmp/.X11-unix
+
 USER suwayomi
 EXPOSE 4567
+
+# Ubuntu exposes libgluegen_rt.so as libgluegen2_rt.so for some reason, so rename it
+# JCEF (or Java?) also does not search /usr/lib/jni, so copy them over into one it will search
+RUN mkdir -p natives/linux-amd64 && \
+    cp /usr/lib/jni/libgluegen2_rt.so natives/linux-amd64/libgluegen_rt.so && \
+    cp /usr/lib/jni/*.so natives/linux-amd64/
+
 CMD ["/home/suwayomi/startup_script.sh"]
 
 # vim: set ft=dockerfile:
