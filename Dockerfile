@@ -1,7 +1,7 @@
 FROM eclipse-temurin:21.0.7_6-jre-noble
 
 ARG BUILD_DATE
-ARG BUILDPLATFORM
+ARG TARGETPLATFORM
 ARG TACHIDESK_RELEASE_TAG
 ARG TACHIDESK_FILENAME
 ARG TACHIDESK_RELEASE_DOWNLOAD_URL
@@ -36,7 +36,7 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/lists/*
 
 # install CEF dependencies
-RUN if [ "$TACHIDESK_KCEF" = "y" ] || ([ "$TACHIDESK_KCEF" = "" ] && ([ "$BUILDPLATFORM" = "linux/amd64" ] || [ "$BUILDPLATFORM" = "linux/arm64" ])); then \
+RUN if [ "$TACHIDESK_KCEF" = "y" ] || ([ "$TACHIDESK_KCEF" = "" ] && ([ "$TARGETPLATFORM" = "linux/amd64" ] || [ "$TARGETPLATFORM" = "linux/arm64" ])); then \
       apt-get update && \
       apt-get -y install --no-install-recommends -y libxss1 libxext6 libxrender1 libxcomposite1 libxdamage1 libxkbcommon0 libxtst6 \
           libjogl2-jni libgluegen2-jni libglib2.0-0t64 libnss3 libdbus-1-3 libpango-1.0-0 libcairo2 libasound2t64 \
