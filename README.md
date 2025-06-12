@@ -99,9 +99,6 @@ We do not allow configuration of the downloads folder, since Docker Volumes can 
 
 The latest stable release of the server. Also tagged as `:stable`.
 
-> [!CAUTION]
-> Currently the `ghcr.io/suwayomi/suwayomi-server` image does not contain the stable release, please use `ghcr.io/suwayomi/tachidesk` for now instead.
-
 ## Preview
 
 `ghcr.io/suwayomi/suwayomi-server:preview`
