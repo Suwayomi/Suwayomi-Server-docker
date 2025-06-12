@@ -14,7 +14,9 @@ _**Suwayomi data location - /home/suwayomi/.local/share/Tachidesk**_
 
 Docker images are mutli-arch (linux/amd64, linux/arm64/v8, linux/ppc64le, linux/s390x, linux/riscv64) and has small size based on Ubuntu linux.
 
-Logs are sent to stdout and are not written to disk.
+Logs are sent to stdout.
+This allows docker to manage the logs; view them using `docker logs --tail=1000 <container name>` or if using the docker-compose file `docker compose logs --tail=1000 suwayomi`.
+By default, docker stores logs indefinitely, you can [set up logging globally](https://docs.docker.com/engine/logging/configure/) or edit the [compose file with a logging driver](https://docs.docker.com/reference/compose-file/services/#logging).
 
 ### Docker compose
 
