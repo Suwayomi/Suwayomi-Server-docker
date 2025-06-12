@@ -173,7 +173,7 @@ jobs:
         if: inputs.do_upload
         uses: docker/build-push-action@v6
         with:
-          platforms: linux/amd64,linux/arm64/v8,linux/ppc64le,linux/s390x,linux/riscv64
+          platforms: linux/amd64,linux/arm64/v8
           push: true
           build-args: |
             BUILD_DATE=${{ steps.get_latest_release_metadata.outputs.build_date }}
@@ -181,6 +181,30 @@ jobs:
             TACHIDESK_RELEASE_DOWNLOAD_URL=${{ steps.get_latest_release_metadata.outputs.release_url }}
             TACHIDESK_FILENAME=${{ steps.get_latest_release_metadata.outputs.release_filename }}
             TACHIDESK_DOCKER_GIT_COMMIT=${{ steps.get_latest_release_metadata.outputs.tachidesk_docker_git_commit }}
+          tags: |
+            ${{ inputs.tachidesk_release_type == 'stable' && 'ghcr.io/suwayomi/tachidesk:latest' || '' }}
+            ghcr.io/suwayomi/tachidesk:${{ inputs.tachidesk_release_type }}
+            ghcr.io/suwayomi/tachidesk:${{ steps.get_latest_release_metadata.outputs.release_tag }}
+            ${{ inputs.tachidesk_release_type == 'stable' && 'ghcr.io/suwayomi/suwayomi-server:latest' || '' }}
+            ghcr.io/suwayomi/suwayomi-server:${{ inputs.tachidesk_release_type }}
+            ghcr.io/suwayomi/suwayomi-server:${{ steps.get_latest_release_metadata.outputs.release_tag }}
+
+      # And also those that aren't supported by KCEF
+      # the build arg TACHIDESK_KCEF will simply not install the dependencies, so runtime will fail to load libs
+      # but everything else will still work
+      - name: Push container image to registry
+        if: inputs.do_upload
+        uses: docker/build-push-action@v6
+        with:
+          platforms: linux/ppc64le,linux/s390x,linux/riscv64
+          push: true
+          build-args: |
+            BUILD_DATE=${{ steps.get_latest_release_metadata.outputs.build_date }}
+            TACHIDESK_RELEASE_TAG=${{ steps.get_latest_release_metadata.outputs.release_tag }}
+            TACHIDESK_RELEASE_DOWNLOAD_URL=${{ steps.get_latest_release_metadata.outputs.release_url }}
+            TACHIDESK_FILENAME=${{ steps.get_latest_release_metadata.outputs.release_filename }}
+            TACHIDESK_DOCKER_GIT_COMMIT=${{ steps.get_latest_release_metadata.outputs.tachidesk_docker_git_commit }}
+            TACHIDESK_KCEF=n
           tags: |
             ${{ inputs.tachidesk_release_type == 'stable' && 'ghcr.io/suwayomi/tachidesk:latest' || '' }}
             ghcr.io/suwayomi/tachidesk:${{ inputs.tachidesk_release_type }}
