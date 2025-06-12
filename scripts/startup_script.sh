@@ -89,7 +89,7 @@ sed -i -r "s/server.opdsShowOnlyUnreadChapters = ([0-9]+|[a-zA-Z]+)( #)?/server.
 sed -i -r "s/server.opdsShowOnlyDownloadedChapters = ([0-9]+|[a-zA-Z]+)( #)?/server.opdsShowOnlyDownloadedChapters = ${OPDS_SHOW_ONLY_DOWNLOADED_CHAPTERS:-\1} #/" /home/suwayomi/.local/share/Tachidesk/server.conf
 sed -i -r "s/server.opdsChapterSortOrder = \"(.*?)\"( #)?/server.opdsChapterSortOrder = \"${OPDS_CHAPTER_SORT_ORDER:-\1}\" #/" /home/suwayomi/.local/share/Tachidesk/server.conf
 
-if [ "$TACHIDESK_KCEF" = "" ] || [ "$TACHIDESK_KCEF" = "y" ]; then
+if command -v Xvfb >/dev/null; then
   Xvfb :0 -screen 0 800x680x24 -nolisten tcp >/dev/null 2>&1 &
   export DISPLAY=:0
 else
