@@ -90,9 +90,16 @@ sed -i -r "s/server.opdsShowOnlyDownloadedChapters = ([0-9]+|[a-zA-Z]+)( #)?/ser
 sed -i -r "s/server.opdsChapterSortOrder = \"(.*?)\"( #)?/server.opdsChapterSortOrder = \"${OPDS_CHAPTER_SORT_ORDER:-\1}\" #/" /home/suwayomi/.local/share/Tachidesk/server.conf
 
 if command -v Xvfb >/dev/null; then
-  export LD_PRELOAD=/home/suwayomi/.local/share/Tachidesk/bin/kcef/libcef.so
   Xvfb :0 -screen 0 800x680x24 -nolisten tcp >/dev/null 2>&1 &
   export DISPLAY=:0
+
+  if [ ! -d /home/suwayomi/.local/share/Tachidesk/bin ]; then
+    mkdir -p /home/suwayomi/.local/share/Tachidesk/bin
+  fi
+  if [ ! -d /home/suwayomi/.local/share/Tachidesk/bin/kcef ] && [ ! -L /home/suwayomi/.local/share/Tachidesk/bin/kcef ]; then
+    ln -s /opt/kcef/jcef /home/suwayomi/.local/share/Tachidesk/bin/kcef
+  fi
+  export LD_PRELOAD=/home/suwayomi/.local/share/Tachidesk/bin/kcef/libcef.so
 else
   echo "Suwayomi built without KCEF support, not starting Xvfb"
 fi

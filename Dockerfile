@@ -7,6 +7,7 @@ ARG TACHIDESK_FILENAME
 ARG TACHIDESK_RELEASE_DOWNLOAD_URL
 ARG TACHIDESK_DOCKER_GIT_COMMIT
 ARG TACHIDESK_KCEF=y # y or n, leave empty for auto-detection
+ARG TACHIDESK_KCEF_RELEASE_URL
 
 LABEL maintainer="suwayomi" \
       org.opencontainers.image.title="Suwayomi Docker" \
@@ -35,12 +36,16 @@ RUN apt-get update && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
+COPY scripts/kcef_download.sh /root/kcef_download.sh
+
 # install CEF dependencies
 RUN if [ "$TACHIDESK_KCEF" = "y" ] || ([ "$TACHIDESK_KCEF" = "" ] && ([ "$TARGETPLATFORM" = "linux/amd64" ] || [ "$TARGETPLATFORM" = "linux/arm64" ])); then \
       apt-get update && \
       apt-get -y install --no-install-recommends -y libxss1 libxext6 libxrender1 libxcomposite1 libxdamage1 libxkbcommon0 libxtst6 \
           libjogl2-jni libgluegen2-jni libglib2.0-0t64 libnss3 libdbus-1-3 libpango-1.0-0 libcairo2 libasound2t64 \
-          libatk-bridge2.0-0t64 libcups2t64 libdrm2 libgbm1 xvfb && \
+          libatk-bridge2.0-0t64 libcups2t64 libdrm2 libgbm1 xvfb \
+          curl jq gawk findutils && \
+      /root/kcef_download.sh "$TACHIDESK_KCEF_RELEASE_URL" "$TARGETPLATFORM" && \
       apt-get clean && \
       rm -rf /var/lib/apt/lists/* || exit 1; \
     fi
