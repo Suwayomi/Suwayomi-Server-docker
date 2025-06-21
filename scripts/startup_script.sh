@@ -102,6 +102,11 @@ if command -v Xvfb >/dev/null; then
       ln -s /opt/kcef/jcef /home/suwayomi/.local/share/Tachidesk/bin/kcef
     fi
   fi
+  if [ -d /home/suwayomi/.local/share/Tachidesk/bin/kcef ] || [ -L /home/suwayomi/.local/share/Tachidesk/bin/kcef ]; then
+    # make sure all files are always executable. KCEF (and our downloader) ensure this on creation, but if the flag is lost
+    # at some point, CEF will die
+    chmod -R a+x /home/suwayomi/.local/share/Tachidesk/bin/kcef || true
+  fi
   export LD_PRELOAD=/home/suwayomi/.local/share/Tachidesk/bin/kcef/libcef.so
 else
   echo "Suwayomi built without KCEF support, not starting Xvfb"
