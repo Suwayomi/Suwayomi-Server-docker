@@ -106,4 +106,8 @@ if command -v Xvfb >/dev/null; then
 else
   echo "Suwayomi built without KCEF support, not starting Xvfb"
 fi
+if [ -f /opt/catch_abort.so ]; then
+  export LD_PRELOAD="/opt/catch_abort.so $LD_PRELOAD"
+fi
+echo "LD_PRELOAD=$LD_PRELOAD"
 exec java -Duser.home=/home/suwayomi -jar "/home/suwayomi/startup/tachidesk_latest.jar";

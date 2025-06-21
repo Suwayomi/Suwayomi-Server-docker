@@ -1,3 +1,20 @@
+FROM eclipse-temurin:21.0.7_6-jdk-noble AS build
+
+ARG TACHIDESK_ABORT_HANDLER_DOWNLOAD_URL
+
+# build abort handler
+RUN if [ -n "$TACHIDESK_ABORT_HANDLER_DOWNLOAD_URL" ]; then \
+      cd /tmp && \
+      curl "$TACHIDESK_ABORT_HANDLER_DOWNLOAD_URL" -O && \
+      apt-get update && \
+      apt-get -y install gcc && \
+      gcc -fPIC -I$JAVA_HOME/include -I$JAVA_HOME/include/linux -shared catch_abort.c -lpthread -o /opt/catch_abort.so && \
+      rm -f catch_abort.c && \
+      apt-get -y purge gcc --auto-remove && \
+      apt-get clean && \
+      rm -rf /var/lib/apt/lists/* || exit 1; \
+    fi
+
 FROM eclipse-temurin:21.0.7_6-jre-noble
 
 ARG BUILD_DATE
@@ -49,6 +66,8 @@ RUN if [ "$TACHIDESK_KCEF" = "y" ] || ([ "$TACHIDESK_KCEF" = "" ] && ([ "$TARGET
       apt-get clean && \
       rm -rf /var/lib/apt/lists/* || exit 1; \
     fi
+
+COPY --from=build /opt/*.so /opt/
 
 # Create a user to run as
 RUN userdel -r ubuntu
