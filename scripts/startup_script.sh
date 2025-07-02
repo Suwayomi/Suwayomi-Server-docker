@@ -90,6 +90,7 @@ sed -i -r "s/server.opdsShowOnlyDownloadedChapters = ([0-9]+|[a-zA-Z]+)( #)?/ser
 sed -i -r "s/server.opdsChapterSortOrder = \"(.*?)\"( #)?/server.opdsChapterSortOrder = \"${OPDS_CHAPTER_SORT_ORDER:-\1}\" #/" /home/suwayomi/.local/share/Tachidesk/server.conf
 
 if command -v Xvfb >/dev/null; then
+  rm -f /tmp/.X0-lock
   Xvfb :0 -screen 0 800x680x24 -nolisten tcp >/dev/null 2>&1 &
   export DISPLAY=:0
 
