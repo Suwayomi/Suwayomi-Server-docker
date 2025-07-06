@@ -49,7 +49,7 @@ RUN apt-get update && \
 
 # install unzip to unzip the server-reference.conf from the jar
 RUN apt-get update && \
-    apt-get -y install -y unzip && \
+    apt-get -y install -y unzip tini && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
@@ -100,6 +100,7 @@ RUN if command -v Xvfb; then \
 USER suwayomi
 EXPOSE 4567
 
+ENTRYPOINT ["tini", "--"]
 CMD ["/home/suwayomi/startup_script.sh"]
 
 # vim: set ft=dockerfile:

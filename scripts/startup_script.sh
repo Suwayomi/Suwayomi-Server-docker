@@ -90,10 +90,7 @@ sed -i -r "s/server.opdsShowOnlyDownloadedChapters = ([0-9]+|[a-zA-Z]+)( #)?/ser
 sed -i -r "s/server.opdsChapterSortOrder = \"(.*?)\"( #)?/server.opdsChapterSortOrder = \"${OPDS_CHAPTER_SORT_ORDER:-\1}\" #/" /home/suwayomi/.local/share/Tachidesk/server.conf
 
 if command -v Xvfb >/dev/null; then
-  rm -f /tmp/.X0-lock
-  Xvfb :0 -screen 0 800x680x24 -nolisten tcp >/dev/null 2>&1 &
-  export DISPLAY=:0
-
+  command="xvfb-run --auto-servernum java"
   if [ -d /opt/kcef/jcef ]; then
     # if we have KCEF downloaded in the container, attempt to link it into the data directory where Suwayomi expects it
     if [ ! -d /home/suwayomi/.local/share/Tachidesk/bin ]; then
@@ -106,7 +103,7 @@ if command -v Xvfb >/dev/null; then
   if [ -d /home/suwayomi/.local/share/Tachidesk/bin/kcef ] || [ -L /home/suwayomi/.local/share/Tachidesk/bin/kcef ]; then
     # make sure all files are always executable. KCEF (and our downloader) ensure this on creation, but if the flag is lost
     # at some point, CEF will die
-    chmod -R a+x /home/suwayomi/.local/share/Tachidesk/bin/kcef || true
+    chmod -R a+x /home/suwayomi/.local/share/Tachidesk/bin/kcef 2>/dev/null || true
   fi
   export LD_PRELOAD=/home/suwayomi/.local/share/Tachidesk/bin/kcef/libcef.so
 else
@@ -114,6 +111,7 @@ else
 fi
 if [ -f /opt/catch_abort.so ]; then
   export LD_PRELOAD="/opt/catch_abort.so $LD_PRELOAD"
+  command="java"
 fi
 echo "LD_PRELOAD=$LD_PRELOAD"
-exec java -Duser.home=/home/suwayomi -jar "/home/suwayomi/startup/tachidesk_latest.jar";
+exec $command -Duser.home=/home/suwayomi -jar "/home/suwayomi/startup/tachidesk_latest.jar";
