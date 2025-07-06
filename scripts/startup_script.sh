@@ -63,7 +63,7 @@ sed -i -r "s/server.updateMangas = ([0-9]+|[a-zA-Z]+)( #)?/server.updateMangas =
 AUTH_MODE_VAL="${AUTH_MODE:-$( [ "$BASIC_AUTH_ENABLED" = "true" ] && echo 'basic_auth' )}"
 AUTH_USERNAME_VAL="${AUTH_USERNAME:-$BASIC_AUTH_USERNAME}"
 AUTH_PASSWORD_VAL="${AUTH_PASSWORD:-$BASIC_AUTH_PASSWORD}"
-sed -i -r "s/server.authMode = \"(.*?)\"( #)?/server.authMode = ${AUTH_MODE_VAL:-\1} #/" /home/suwayomi/.local/share/Tachidesk/server.conf
+sed -i -r "s/server.authMode = \"(.*?)\"( #)?/server.authMode = \"${AUTH_MODE_VAL:-\1}\" #/" /home/suwayomi/.local/share/Tachidesk/server.conf
 sed -i -r "s/server.authUsername = \"(.*?)\"( #)?/server.authUsername = \"${AUTH_USERNAME_VAL:-\1}\" #/" /home/suwayomi/.local/share/Tachidesk/server.conf
 sed -i -r "s/server.authPassword = \"(.*?)\"( #)?/server.authPassword = \"${AUTH_PASSWORD_VAL:-\1}\" #/" /home/suwayomi/.local/share/Tachidesk/server.conf
 
