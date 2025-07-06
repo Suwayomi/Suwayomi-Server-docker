@@ -60,7 +60,7 @@ sed -i -r "s/server.globalUpdateInterval = ([0-9]+|[a-zA-Z]+)( #)?/server.global
 sed -i -r "s/server.updateMangas = ([0-9]+|[a-zA-Z]+)( #)?/server.updateMangas = ${UPDATE_MANGA_INFO:-\1} #/" /home/suwayomi/.local/share/Tachidesk/server.conf
 
 # Authentication
-AUTH_MODE_VAL="${AUTH_MODE:-$( [ "$BASIC_AUTH_ENABLED" = "true" ] && echo 'basic_auth' )}"
+AUTH_MODE_VAL="${AUTH_MODE:-$( [ "$BASIC_AUTH_ENABLED" = "true" ] && echo 'basic_auth' || echo "" )}"
 AUTH_USERNAME_VAL="${AUTH_USERNAME:-$BASIC_AUTH_USERNAME}"
 AUTH_PASSWORD_VAL="${AUTH_PASSWORD:-$BASIC_AUTH_PASSWORD}"
 sed -i -r "s/server.authMode = \"(.*?)\"( #)?/server.authMode = \"${AUTH_MODE_VAL:-\1}\" #/" /home/suwayomi/.local/share/Tachidesk/server.conf
