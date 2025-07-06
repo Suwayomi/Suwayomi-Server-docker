@@ -97,6 +97,7 @@ RUN if command -v Xvfb; then \
       cp /usr/lib/jni/*.so ./; \
     fi
 
+ENV HOME=/home/suwayomi
 USER suwayomi
 EXPOSE 4567
 
