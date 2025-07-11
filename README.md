@@ -6,6 +6,9 @@
 
 Run [Suwayomi-Server](https://github.com/Suwayomi/Suwayomi-Server) inside docker container as non-root user. The server will be running on http://localhost:4567 open this url in your browser.
 
+> [!CAUTION]
+> This docker image is known to occasionally fail to work. This seems to be caused by problems in the download. If the logs simply end with `LD_PRELOAD=/opt/catch_abort.so /home/suwayomi/.local/share/Tachidesk/bin/kcef/libcef.so`, please remove the downloaded image and pull again. If this does not help, open a [new issue](https://github.com/Suwayomi/Suwayomi-Server-docker/issues/new).
+
 Docker Releases - https://github.com/Suwayomi/Suwayomi-Server-docker/pkgs/container/tachidesk
 
 Dockerfile - https://github.com/Suwayomi/Suwayomi-Server-docker
