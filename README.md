@@ -79,6 +79,10 @@ There are a number of environment variables available to configure Suwayomi:
 | **OPDS_SHOW_ONLY_DOWNLOADED_CHAPTERS** |         `false`         |                                                                    Filter manga feed to display only chapters you have downloaded                                                                     |
 |      **OPDS_CHAPTER_SORT_ORDER**       |         `DESC`          |                                                                                            "DESC" or "ASC"                                                                                            |
 
+> [!CAUTION]
+> This docker image is known to occasionally fail to work. This seems to be caused by problems in the download. If the logs simply end with `LD_PRELOAD=/opt/catch_abort.so /home/suwayomi/.local/share/Tachidesk/bin/kcef/libcef.so`, please remove the downloaded image and pull again. If this does not help, open a [new issue](https://github.com/Suwayomi/Suwayomi-Server-docker/issues/new).
+
+
 ### Downloads Folder
 We do not allow configuration of the downloads folder, since Docker Volumes can handle that instead, here is an example of a docker-compose.yaml that has downloads volume configuration:
 ```yaml
