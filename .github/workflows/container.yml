@@ -225,3 +225,19 @@ jobs:
         if: inputs.do_upload && inputs.tachidesk_release_type == 'stable'
         run: |
           curl -H "Content-Type: application/json" -d '{"content": "Docker Stable Image Published!","embeds":[{"color":5409028,"author":{"name":"${{ github.repository_owner }}","icon_url":"https://avatars.githubusercontent.com/u/81182076","url":"https://github.com/${{ github.repository_owner }}"},"title":"Docker Stable Release","url":"https://github.com/${{ github.repository_owner }}/Suwayomi-Server-docker","fields":[{"name":"docker update","value":"docker pull ghcr.io/suwayomi/suwayomi-server:stable","inline":false},{"name":"docker run","value":"docker run -p 4567:4567 ghcr.io/suwayomi/suwayomi-server","inline":false}],"thumbnail":{"url": "https://www.docker.com/sites/default/files/d8/2019-07/vertical-logo-monochromatic.png"},"description":"Suwayomi-Server version - ${{ steps.get_latest_release_metadata.outputs.release_tag }}"}]}' "https://discord.com/api/webhooks/${{ secrets.DISCORD_TACHIDESK_WEBHOOK_ID }}/${{ secrets.DISCORD_TACHIDESK_TOKEN }}"
+
+      - name: Save tag (stable build)
+        if: inputs.do_upload && inputs.tachidesk_release_type == 'stable'
+        run: |
+          echo "`jq --arg value "${{ steps.get_latest_release_metadata.outputs.release_tag }}" '.stable=$value' scripts/tachidesk_version.json`" > scripts/tachidesk_version.json
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git config --global user.name "github-actions[bot]"
+          git status
+          if [ -n "$(git status --porcelain)" ]; then
+              git pull
+              git add .
+              git commit -a -m "Update stable version"
+              git push
+          else
+              echo "No changes to commit"
+          fi
