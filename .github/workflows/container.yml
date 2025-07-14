@@ -130,6 +130,7 @@ jobs:
             -e AUTO_DOWNLOAD_EXCLUDE_UNREAD=false \
             -e AUTO_DOWNLOAD_NEW_CHAPTERS_LIMIT=5 \
             -e AUTO_DOWNLOAD_IGNORE_REUPLOADS=false \
+            -e DOWNLOAD_CONVERSIONS="{ \"image/filetype\" = { target = \"image/filetype\" }, \"image/filetype\" = { target = \"image/filetype\" } }" \
             -e EXTENSION_REPOS=[\"http://github.com/orginazation-name/repo-name\",\"http://github.com/orginazation-name-2/repo-name-2\"] \
             -e MAX_SOURCES_IN_PARALLEL=12 \
             -e UPDATE_EXCLUDE_UNREAD=false \
