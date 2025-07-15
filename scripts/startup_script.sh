@@ -96,6 +96,8 @@ sed -i -r "s/server.opdsShowOnlyUnreadChapters = ([0-9]+|[a-zA-Z]+)( #)?/server.
 sed -i -r "s/server.opdsShowOnlyDownloadedChapters = ([0-9]+|[a-zA-Z]+)( #)?/server.opdsShowOnlyDownloadedChapters = ${OPDS_SHOW_ONLY_DOWNLOADED_CHAPTERS:-\1} #/" /home/suwayomi/.local/share/Tachidesk/server.conf
 sed -i -r "s/server.opdsChapterSortOrder = \"(.*?)\"( #)?/server.opdsChapterSortOrder = \"${OPDS_CHAPTER_SORT_ORDER:-\1}\" #/" /home/suwayomi/.local/share/Tachidesk/server.conf
 
+rm -rf /home/suwayomi/.local/share/Tachidesk/cache/kcef/Singleton*
+
 if command -v Xvfb >/dev/null; then
   command="xvfb-run --auto-servernum java"
   if [ -d /opt/kcef/jcef ]; then
