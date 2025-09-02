@@ -26,16 +26,34 @@ services:
 #      - AUTH_USERNAME=manga
 #      - AUTH_PASSWORD=hello123
 #      - EXTENSION_REPOS=["http://github.com/orginazation-name/repo-name", "http://github.com/orginazation-name-2/repo-name-2"]
+
+#    example env vars for using postgreSQL database:
+#      - DATABASE_TYPE=POSTGRESQL
+#      - DATABASE_URL=postgresql://postgresql:5432/${POSTGRES_DB}
+#      - DATABASE_USERNAME=${POSTGRES_USER}
+#      - DATABASE_PASSWORD=${POSTGRES_PASSWORD}
     volumes:
       - ./data:/home/suwayomi/.local/share/Tachidesk
     ports:
       - "4567:4567"
     restart: on-failure:3
+
+#    example postgreSQL database service:
+#   postgresql:
+#     container_name: postgresql
+#     image: postgres:17.6-alpine
+#     environment:
+#       POSTGRES_USER: ${POSTGRES_USER}
+#       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+#       PGDATA: /data/postgres
+#       POSTGRES_DB: ${POSTGRES_DB}
+#       POSTGRES_HOST_AUTH_METHOD: scram-sha-256
+#     volumes:
+#       - ./postgres:/data/postgres
+#     restart: unless-stopped
   flaresolverr:
     image: ghcr.io/thephaseless/byparr:latest
     container_name: flaresolverr
     environment:
       - TZ=Etc/UTC # Use TZ database name from https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
-    ports:
-      - "8191:8191"
     restart: unless-stopped
