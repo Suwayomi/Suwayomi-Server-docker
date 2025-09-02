@@ -170,6 +170,10 @@ jobs:
             -e KOREADER_SYNC_CHECKSUM_METHOD=filename \
             -e KOREADER_SYNC_STRATEGY=send \
             -e KOREADER_SYNC_PERCENTAGE_TOLERANCE=0.001 \
+            -e DATABASE_TYPE=H2 \
+            -e DATABASE_URL=postgresql://localhost:5432/suwayomi \
+            -e DATABASE_USERNAME=manga \
+            -e DATABASE_PASSWORD=hello123 \
             --name=suwayomi_test \
             ${{ env.test_image_tag }}
           sleep 15

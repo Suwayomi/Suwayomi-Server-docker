@@ -1,5 +1,4 @@
 ---
-version: '3.7'
 services:
   suwayomi:
     image: ghcr.io/suwayomi/suwayomi-server:preview
