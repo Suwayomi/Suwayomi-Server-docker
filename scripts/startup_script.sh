@@ -36,8 +36,8 @@ sed -i -r "s/server.socksProxyPassword = \"(.*?)\"( #)?/server.socksProxyPasswor
 
 # webUI
 sed -i -r "s/server.webUIEnabled = ([0-9]+|[a-zA-Z]+)( #)?/server.webUIEnabled = ${WEB_UI_ENABLED:-\1} #/" /home/suwayomi/.local/share/Tachidesk/server.conf
-sed -i -r "s/server.webUIFlavor = \"?([a-zA-Z0-9_]+)\"?( #)?/server.webUIFlavor = \"${WEB_UI_FLAVOR:-\1}\" #/" /home/suwayomi/.local/share/Tachidesk/server.conf
-sed -i -r "s/server.webUIChannel = \"?([a-zA-Z0-9_]+)\"?( #)?/server.webUIChannel = ${WEB_UI_CHANNEL:-\1} #/" /home/suwayomi/.local/share/Tachidesk/server.conf
+sed -i -r "s/server.webUIFlavor = \"*([a-zA-Z0-9_]+)\"*( #)?/server.webUIFlavor = \"${WEB_UI_FLAVOR:-\1}\" #/" /home/suwayomi/.local/share/Tachidesk/server.conf
+sed -i -r "s/server.webUIChannel = \"*([a-zA-Z0-9_]+)\"*( #)?/server.webUIChannel = ${WEB_UI_CHANNEL:-\1} #/" /home/suwayomi/.local/share/Tachidesk/server.conf
 sed -i -r "s/server.webUIUpdateCheckInterval = ([0-9]+|[a-zA-Z]+)( #)?/server.webUIUpdateCheckInterval = ${WEB_UI_UPDATE_INTERVAL:-\1} #/" /home/suwayomi/.local/share/Tachidesk/server.conf
 
 # downloader
@@ -69,7 +69,7 @@ sed -i -r "s/server.updateMangas = ([0-9]+|[a-zA-Z]+)( #)?/server.updateMangas =
 AUTH_MODE_VAL="${AUTH_MODE:-$( [ "$BASIC_AUTH_ENABLED" = "true" ] && echo 'basic_auth' || echo "" )}"
 AUTH_USERNAME_VAL="${AUTH_USERNAME:-$BASIC_AUTH_USERNAME}"
 AUTH_PASSWORD_VAL="${AUTH_PASSWORD:-$BASIC_AUTH_PASSWORD}"
-sed -i -r "s/server.authMode = \"?([a-zA-Z0-9_]+)\"?( #)?/server.authMode = ${AUTH_MODE_VAL:-\1} #/" /home/suwayomi/.local/share/Tachidesk/server.conf
+sed -i -r "s/server.authMode = \"*([a-zA-Z0-9_]+)\"*( #)?/server.authMode = ${AUTH_MODE_VAL:-\1} #/" /home/suwayomi/.local/share/Tachidesk/server.conf
 sed -i -r "s/server.authUsername = \"(.*?)\"( #)?/server.authUsername = \"${AUTH_USERNAME_VAL:-\1}\" #/" /home/suwayomi/.local/share/Tachidesk/server.conf
 sed -i -r "s/server.authPassword = \"(.*?)\"( #)?/server.authPassword = \"${AUTH_PASSWORD_VAL:-\1}\" #/" /home/suwayomi/.local/share/Tachidesk/server.conf
 sed -i -r "s/server.jwtAudience = \"(.*?)\"( #)?/server.jwtAudience = \"${JWT_AUDIENCE:-\1}\" #/" /home/suwayomi/.local/share/Tachidesk/server.conf
@@ -107,19 +107,19 @@ sed -i -r "s/server.opdsEnablePageReadProgress = ([0-9]+|[a-zA-Z]+)( #)?/server.
 sed -i -r "s/server.opdsMarkAsReadOnDownload = ([0-9]+|[a-zA-Z]+)( #)?/server.opdsMarkAsReadOnDownload = ${OPDS_MARK_AS_READ_ON_DOWNLOAD:-\1} #/" /home/suwayomi/.local/share/Tachidesk/server.conf
 sed -i -r "s/server.opdsShowOnlyUnreadChapters = ([0-9]+|[a-zA-Z]+)( #)?/server.opdsShowOnlyUnreadChapters = ${OPDS_SHOW_ONLY_UNREAD_CHAPTERS:-\1} #/" /home/suwayomi/.local/share/Tachidesk/server.conf
 sed -i -r "s/server.opdsShowOnlyDownloadedChapters = ([0-9]+|[a-zA-Z]+)( #)?/server.opdsShowOnlyDownloadedChapters = ${OPDS_SHOW_ONLY_DOWNLOADED_CHAPTERS:-\1} #/" /home/suwayomi/.local/share/Tachidesk/server.conf
-sed -i -r "s/server.opdsChapterSortOrder = \"?([a-zA-Z0-9_]+)\"?( #)?/server.opdsChapterSortOrder = ${OPDS_CHAPTER_SORT_ORDER:-\1} #/" /home/suwayomi/.local/share/Tachidesk/server.conf
+sed -i -r "s/server.opdsChapterSortOrder = \"*([a-zA-Z0-9_]+)\"*( #)?/server.opdsChapterSortOrder = ${OPDS_CHAPTER_SORT_ORDER:-\1} #/" /home/suwayomi/.local/share/Tachidesk/server.conf
 
 # koreader
 sed -i -r "s|server.koreaderSyncServerUrl = \"(.*?)\"( #)?|server.koreaderSyncServerUrl = \"${KOREADER_SYNC_SERVER_URL:-\1}\" #|" /home/suwayomi/.local/share/Tachidesk/server.conf
 sed -i -r "s/server.koreaderSyncUsername = \"(.*?)\"( #)?/server.koreaderSyncUsername = \"${KOREADER_SYNC_USERNAME:-\1}\" #/" /home/suwayomi/.local/share/Tachidesk/server.conf
 sed -i -r "s/server.koreaderSyncUserkey = \"(.*?)\"( #)?/server.koreaderSyncUserkey = \"${KOREADER_SYNC_USERKEY:-\1}\" #/" /home/suwayomi/.local/share/Tachidesk/server.conf
 sed -i -r "s/server.koreaderSyncDeviceId = \"(.*?)\"( #)?/server.koreaderSyncDeviceId = \"${KOREADER_SYNC_DEVICE_ID:-\1}\" #/" /home/suwayomi/.local/share/Tachidesk/server.conf
-sed -i -r "s/server.koreaderSyncChecksumMethod = \"?([a-zA-Z0-9_]+)\"?( #)?/server.koreaderSyncChecksumMethod = ${KOREADER_SYNC_CHECKSUM_METHOD:-\1} #/" /home/suwayomi/.local/share/Tachidesk/server.conf
-sed -i -r "s/server.koreaderSyncStrategy = \"?([a-zA-Z0-9_]+)\"?( #)?/server.koreaderSyncStrategy = ${KOREADER_SYNC_STRATEGY:-\1} #/" /home/suwayomi/.local/share/Tachidesk/server.conf
+sed -i -r "s/server.koreaderSyncChecksumMethod = \"*([a-zA-Z0-9_]+)\"*( #)?/server.koreaderSyncChecksumMethod = ${KOREADER_SYNC_CHECKSUM_METHOD:-\1} #/" /home/suwayomi/.local/share/Tachidesk/server.conf
+sed -i -r "s/server.koreaderSyncStrategy = \"*([a-zA-Z0-9_]+)\"*( #)?/server.koreaderSyncStrategy = ${KOREADER_SYNC_STRATEGY:-\1} #/" /home/suwayomi/.local/share/Tachidesk/server.conf
 sed -i -r "s/server.koreaderSyncPercentageTolerance = ([0-9\.\-E]+)?/server.koreaderSyncPercentageTolerance = ${KOREADER_SYNC_PERCENTAGE_TOLERANCE:-\1} #/" /home/suwayomi/.local/share/Tachidesk/server.conf
 
 # database
-sed -i -r "s/server.databaseType = \"?([a-zA-Z0-9_]+)\"?( #)?/server.databaseType = ${DATABASE_TYPE:-\1} #/" /home/suwayomi/.local/share/Tachidesk/server.conf
+sed -i -r "s/server.databaseType = \"*([a-zA-Z0-9_]+)\"*( #)?/server.databaseType = ${DATABASE_TYPE:-\1} #/" /home/suwayomi/.local/share/Tachidesk/server.conf
 sed -i -r "s|server.databaseUrl = \"(.*?)\"( #)?|server.databaseUrl = \"${DATABASE_URL:-\1}\" #|" /home/suwayomi/.local/share/Tachidesk/server.conf
 sed -i -r "s/server.databaseUsername = \"(.*?)\"( #)?/server.databaseUsername = \"${DATABASE_USERNAME:-\1}\" #/" /home/suwayomi/.local/share/Tachidesk/server.conf
 sed -i -r "s/server.databasePassword = \"(.*?)\"( #)?/server.databasePassword = \"${DATABASE_PASSWORD:-\1}\" #/" /home/suwayomi/.local/share/Tachidesk/server.conf
