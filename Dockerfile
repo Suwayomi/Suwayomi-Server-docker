@@ -17,28 +17,9 @@ RUN if [ -n "$TACHIDESK_ABORT_HANDLER_DOWNLOAD_URL" ]; then \
 
 FROM eclipse-temurin:21.0.8_9-jre-noble
 
-ARG BUILD_DATE
 ARG TARGETPLATFORM
-ARG TACHIDESK_RELEASE_TAG
-ARG TACHIDESK_FILENAME
-ARG TACHIDESK_DOCKER_GIT_COMMIT
 ARG TACHIDESK_KCEF=y # y or n, leave empty for auto-detection
 ARG TACHIDESK_KCEF_RELEASE_URL
-
-LABEL maintainer="suwayomi" \
-      org.opencontainers.image.title="Suwayomi Docker" \
-      org.opencontainers.image.authors="https://github.com/suwayomi" \
-      org.opencontainers.image.url="https://github.com/suwayomi/docker-tachidesk/pkgs/container/tachidesk" \
-      org.opencontainers.image.source="https://github.com/suwayomi/docker-tachidesk" \
-      org.opencontainers.image.description="This image is used to start suwayomi server in a container" \
-      org.opencontainers.image.vendor="suwayomi" \
-      org.opencontainers.image.created=$BUILD_DATE \
-      org.opencontainers.image.version=$TACHIDESK_RELEASE_TAG \
-      tachidesk.docker_commit=$TACHIDESK_DOCKER_GIT_COMMIT \
-      tachidesk.release_tag=$TACHIDESK_RELEASE_TAG \
-      tachidesk.filename=$TACHIDESK_FILENAME \
-      download_url=$TACHIDESK_RELEASE_DOWNLOAD_URL \
-      org.opencontainers.image.licenses="MPL-2.0"
 
 # Install envsubst from GNU's gettext project
 # install unzip to unzip the server-reference.conf from the jar
@@ -72,12 +53,6 @@ RUN groupadd --gid 1000 suwayomi && \
 
 WORKDIR /home/suwayomi
 
-# Copy the app into the container
-ARG TACHIDESK_RELEASE_DOWNLOAD_URL
-RUN curl -s --create-dirs -L $TACHIDESK_RELEASE_DOWNLOAD_URL -o /home/suwayomi/startup/tachidesk_latest.jar
-COPY scripts/create_server_conf.sh /home/suwayomi/create_server_conf.sh
-COPY scripts/startup_script.sh /home/suwayomi/startup_script.sh
-
 # update permissions of files.
 # we grant o+rwx because we need to allow non default UIDs (eg via docker run ... --user)
 # to write to the directory to generate the server.conf
@@ -92,6 +67,32 @@ RUN if command -v Xvfb; then \
       cp /usr/lib/jni/libgluegen2_rt.so libgluegen_rt.so && \
       cp /usr/lib/jni/*.so ./; \
     fi
+
+COPY scripts/create_server_conf.sh /home/suwayomi/create_server_conf.sh
+COPY scripts/startup_script.sh /home/suwayomi/startup_script.sh
+
+ARG TACHIDESK_RELEASE_DOWNLOAD_URL
+# Copy the app into the container
+RUN curl -s --create-dirs -L $TACHIDESK_RELEASE_DOWNLOAD_URL -o /home/suwayomi/startup/tachidesk_latest.jar
+
+ARG BUILD_DATE
+ARG TACHIDESK_RELEASE_TAG
+ARG TACHIDESK_FILENAME
+ARG TACHIDESK_DOCKER_GIT_COMMIT
+LABEL maintainer="suwayomi" \
+      org.opencontainers.image.title="Suwayomi Docker" \
+      org.opencontainers.image.authors="https://github.com/suwayomi" \
+      org.opencontainers.image.url="https://github.com/suwayomi/docker-tachidesk/pkgs/container/tachidesk" \
+      org.opencontainers.image.source="https://github.com/suwayomi/docker-tachidesk" \
+      org.opencontainers.image.description="This image is used to start suwayomi server in a container" \
+      org.opencontainers.image.vendor="suwayomi" \
+      org.opencontainers.image.created=$BUILD_DATE \
+      org.opencontainers.image.version=$TACHIDESK_RELEASE_TAG \
+      tachidesk.docker_commit=$TACHIDESK_DOCKER_GIT_COMMIT \
+      tachidesk.release_tag=$TACHIDESK_RELEASE_TAG \
+      tachidesk.filename=$TACHIDESK_FILENAME \
+      download_url=$TACHIDESK_RELEASE_DOWNLOAD_URL \
+      org.opencontainers.image.licenses="MPL-2.0"
 
 ENV HOME=/home/suwayomi
 USER suwayomi
