@@ -21,7 +21,6 @@ ARG BUILD_DATE
 ARG TARGETPLATFORM
 ARG TACHIDESK_RELEASE_TAG
 ARG TACHIDESK_FILENAME
-ARG TACHIDESK_RELEASE_DOWNLOAD_URL
 ARG TACHIDESK_DOCKER_GIT_COMMIT
 ARG TACHIDESK_KCEF=y # y or n, leave empty for auto-detection
 ARG TACHIDESK_KCEF_RELEASE_URL
@@ -74,6 +73,7 @@ RUN groupadd --gid 1000 suwayomi && \
 WORKDIR /home/suwayomi
 
 # Copy the app into the container
+ARG TACHIDESK_RELEASE_DOWNLOAD_URL
 RUN curl -s --create-dirs -L $TACHIDESK_RELEASE_DOWNLOAD_URL -o /home/suwayomi/startup/tachidesk_latest.jar
 COPY scripts/create_server_conf.sh /home/suwayomi/create_server_conf.sh
 COPY scripts/startup_script.sh /home/suwayomi/startup_script.sh
