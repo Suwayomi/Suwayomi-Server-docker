@@ -49,7 +49,8 @@ RUN apt-get update && \
 
 # install unzip to unzip the server-reference.conf from the jar
 RUN apt-get update && \
-    apt-get -y install -y unzip tini && \
+    apt-get -y install -y unzip tini ca-certificates p11-kit && \
+    /usr/bin/p11-kit extract --format=java-cacerts --filter=certificates --overwrite --purpose server-auth $JAVA_HOME/lib/security/cacerts && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
