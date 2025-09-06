@@ -42,14 +42,10 @@ LABEL maintainer="suwayomi" \
       org.opencontainers.image.licenses="MPL-2.0"
 
 # Install envsubst from GNU's gettext project
-RUN apt-get update && \
-    apt-get -y install gettext-base && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
-
 # install unzip to unzip the server-reference.conf from the jar
+# Install tini for a tiny init system (handles orphan processes for graceful restart)
 RUN apt-get update && \
-    apt-get -y install -y unzip tini && \
+    apt-get -y install -y gettext-base unzip tini && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
