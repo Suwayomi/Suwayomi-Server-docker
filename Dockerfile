@@ -25,7 +25,8 @@ ARG TACHIDESK_KCEF_RELEASE_URL
 # install unzip to unzip the server-reference.conf from the jar
 # Install tini for a tiny init system (handles orphan processes for graceful restart)
 RUN apt-get update && \
-    apt-get -y install -y gettext-base unzip tini && \
+    apt-get -y install -y gettext-base unzip tini ca-certificates p11-kit && \
+    /usr/bin/p11-kit extract --format=java-cacerts --filter=certificates --overwrite --purpose server-auth $JAVA_HOME/lib/security/cacerts && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
