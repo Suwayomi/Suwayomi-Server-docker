@@ -168,8 +168,9 @@ jobs:
             -e KOREADER_SYNC_USERKEY=hello123 \
             -e KOREADER_SYNC_DEVICE_ID=100 \
             -e KOREADER_SYNC_CHECKSUM_METHOD=filename \
-            -e KOREADER_SYNC_STRATEGY=send \
             -e KOREADER_SYNC_PERCENTAGE_TOLERANCE=0.001 \
+            -e KOREADER_SYNC_STRATEGY_FORWARD=disabled \
+            -e KOREADER_SYNC_STRATEGY_BACKWARD=prompt \
             -e DATABASE_TYPE=H2 \
             -e DATABASE_URL=postgresql://localhost:5432/suwayomi \
             -e DATABASE_USERNAME=manga \
