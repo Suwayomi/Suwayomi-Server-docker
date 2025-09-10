@@ -36,6 +36,10 @@ update_conf_str() {
     sed -i -r "s|^(${key} = ).*|\1\"${safe_value}\" #|" "$file"
 }
 
+# Set default values for settings
+update_conf "server.initialOpenInBrowserEnabled" "false" "$CONF_FILE"
+update_conf "server.systemTrayEnabled" "false" "$CONF_FILE"
+
 # set default values for environment variables:
 [ -z "$TZ" ] && TZ="Etc/UTC"
 export TZ
@@ -157,16 +161,12 @@ EOF
 
 # Special handling for DOWNLOAD_CONVERSIONS
 if [ -n "$DOWNLOAD_CONVERSIONS" ]; then
-    perl -0777 -i -pe 's|server\.downloadConversions\s*=\s*\{[^#]*\}|server.downloadConversions = '"$DOWNLOAD_CONVERSIONS"'|gs' "$CONF_FILE"
+    perl -0777 -i -pe 's/server\.downloadConversions = ({[^#]*})/server.downloadConversions = $ENV{DOWNLOAD_CONVERSIONS}/gs' "$CONF_FILE"
 fi
 
 # Special handling for EXTENSION_REPOS
 if [ -n "$EXTENSION_REPOS" ]; then
-    perl -0777 -i -pe "s/server\\.extensionRepos = (\
-
-\[.*\\]
-
-)/server.extensionRepos = $ENV{EXTENSION_REPOS}/gs" "$CONF_FILE"
+    perl -0777 -i -pe 's/server\.extensionRepos = (\[.*\])/server.extensionRepos = $ENV{EXTENSION_REPOS}/gs' "$CONF_FILE"
 fi
 
 # Clean cache KCEF
