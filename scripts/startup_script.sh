@@ -130,8 +130,9 @@ server.koreaderSyncUsername|KOREADER_SYNC_USERNAME|string
 server.koreaderSyncUserkey|KOREADER_SYNC_USERKEY|string
 server.koreaderSyncDeviceId|KOREADER_SYNC_DEVICE_ID|string
 server.koreaderSyncChecksumMethod|KOREADER_SYNC_CHECKSUM_METHOD|bool
-server.koreaderSyncStrategy|KOREADER_SYNC_STRATEGY|bool
 server.koreaderSyncPercentageTolerance|KOREADER_SYNC_PERCENTAGE_TOLERANCE|bool
+server.koreaderSyncStrategyForward|KOREADER_SYNC_STRATEGY_FORWARD|string
+server.koreaderSyncStrategyBackward|KOREADER_SYNC_STRATEGY_BACKWARD|string
 
 # ==== Database ====
 server.databaseType|DATABASE_TYPE|bool
