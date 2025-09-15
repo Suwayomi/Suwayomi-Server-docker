@@ -32,6 +32,10 @@ services:
 #      - DATABASE_URL=postgresql://postgresql:5432/${POSTGRES_DB}
 #      - DATABASE_USERNAME=${POSTGRES_USER}
 #      - DATABASE_PASSWORD=${POSTGRES_PASSWORD}
+#    if using postgresql, a health check to make sure db is ready prior to suwayomi launch
+#    depends_on:
+#      postgresql:
+#        condition: service_healthy
     volumes:
       - ./data:/home/suwayomi/.local/share/Tachidesk
     ports:
@@ -39,17 +43,22 @@ services:
     restart: on-failure:3
 
 #    example postgreSQL database service:
-#   postgresql:
-#     container_name: postgresql
-#     image: postgres:17.6-alpine
-#     environment:
-#       POSTGRES_USER: ${POSTGRES_USER}
-#       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-#       PGDATA: /data/postgres
-#       POSTGRES_DB: ${POSTGRES_DB}
-#     volumes:
-#       - ./postgres:/data/postgres
-#     restart: unless-stopped
+#  postgresql:
+#    container_name: postgresql
+#    image: postgres:17.6-alpine
+#    environment:
+#      POSTGRES_USER: ${POSTGRES_USER}
+#      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+#      PGDATA: /data/postgres
+#      POSTGRES_DB: ${POSTGRES_DB}
+#    volumes:
+#      - ./postgres:/data/postgres
+#    restart: unless-stopped
+#    healthcheck:
+#      test: ["CMD-SHELL", "pg_isready -d ${POSTGRES_DB} -U ${POSTGRES_USER}"]
+#      interval: 10s
+#      timeout: 5s
+#      retries: 5
   flaresolverr:
     image: ghcr.io/thephaseless/byparr:latest
     container_name: flaresolverr
