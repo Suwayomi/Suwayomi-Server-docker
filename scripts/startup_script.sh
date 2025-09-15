@@ -47,7 +47,7 @@ sed -i -r "s/server.excludeEntryWithUnreadChapters = ([0-9]+|[a-zA-Z]+)( #)?/ser
 sed -i -r "s/server.autoDownloadNewChaptersLimit = ([0-9]+|[a-zA-Z]+)( #)?/server.autoDownloadNewChaptersLimit = ${AUTO_DOWNLOAD_NEW_CHAPTERS_LIMIT:-\1} #/" /home/suwayomi/.local/share/Tachidesk/server.conf
 sed -i -r "s/server.autoDownloadIgnoreReUploads = ([0-9]+|[a-zA-Z]+)( #)?/server.autoDownloadIgnoreReUploads = ${AUTO_DOWNLOAD_IGNORE_REUPLOADS:-\1} #/" /home/suwayomi/.local/share/Tachidesk/server.conf
 if [ -n "$DOWNLOAD_CONVERSIONS" ]; then
-    perl -0777 -i -pe 's/server\.downloadConversions = ({[^#]*?})/server.downloadConversions = $ENV{DOWNLOAD_CONVERSIONS}/gs' /home/suwayomi/.local/share/Tachidesk/server.conf
+    perl -0777 -i -pe 's/server\.downloadConversions = ({[^#]*?}}?)/server.downloadConversions = $ENV{DOWNLOAD_CONVERSIONS}/gs' /home/suwayomi/.local/share/Tachidesk/server.conf
 fi
 
 # extension repos
