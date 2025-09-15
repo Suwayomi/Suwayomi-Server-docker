@@ -162,12 +162,12 @@ EOF
 
 # Special handling for DOWNLOAD_CONVERSIONS
 if [ -n "$DOWNLOAD_CONVERSIONS" ]; then
-    perl -0777 -i -pe 's/server\.downloadConversions = ({[^#]*})/server.downloadConversions = $ENV{DOWNLOAD_CONVERSIONS}/gs' "$CONF_FILE"
+    perl -0777 -i -pe 's/server\.downloadConversions = ({[^#]*?}}?)/server.downloadConversions = $ENV{DOWNLOAD_CONVERSIONS}/gs' "$CONF_FILE"
 fi
 
 # Special handling for EXTENSION_REPOS
 if [ -n "$EXTENSION_REPOS" ]; then
-    perl -0777 -i -pe 's/server\.extensionRepos = (\[.*\])/server.extensionRepos = $ENV{EXTENSION_REPOS}/gs' "$CONF_FILE"
+    perl -0777 -i -pe 's/server\.extensionRepos = (\[.*?\])/server.extensionRepos = $ENV{EXTENSION_REPOS}/gs' "$CONF_FILE"
 fi
 
 # Clean cache KCEF
