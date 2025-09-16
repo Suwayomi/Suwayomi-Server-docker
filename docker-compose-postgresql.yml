@@ -4,7 +4,11 @@ services:
     image: ghcr.io/suwayomi/suwayomi-server:preview
     # user: 1000:1000
     environment:
-      - TZ=Etc/UTC # Use TZ database name from https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
+      - TZ=${TZ:-Etc/UTC} # Add a TZ variable to .env to change it
+      - DATABASE_TYPE=POSTGRESQL
+      - DATABASE_URL=postgresql://suwayomi-postgresql:5432/${POSTGRES_DB}
+      - DATABASE_USERNAME=${POSTGRES_USER}
+      - DATABASE_PASSWORD=${POSTGRES_PASSWORD}
       # Comment these out if you do not use the flaresolverr container at the bottom of this file
       - FLARESOLVERR_ENABLED=true
       - FLARESOLVERR_URL=http://flaresolverr:8191
@@ -26,15 +30,40 @@ services:
 #      - AUTH_USERNAME=manga
 #      - AUTH_PASSWORD=hello123
 #      - EXTENSION_REPOS=["http://github.com/orginazation-name/repo-name", "http://github.com/orginazation-name-2/repo-name-2"]
+    depends_on:
+      suwayomi-postgresql:
+        condition: service_healthy
     volumes:
       - ./data:/home/suwayomi/.local/share/Tachidesk
     ports:
       - "4567:4567"
     restart: on-failure:3
 
+  suwayomi-postgresql:
+    container_name: suwayomi-postgresql
+    image: postgres:17.6-alpine
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - PGDATA=/data/postgres
+      - POSTGRES_DB=${POSTGRES_DB}
+      - TZ=${TZ:-Etc/UTC}
+      - PGTZ=${TZ:-Etc/UTC}
+    volumes:
+      - ./postgres:/data/postgres
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -d ${POSTGRES_DB} -U ${POSTGRES_USER}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
   flaresolverr:
     image: ghcr.io/thephaseless/byparr:latest
     container_name: flaresolverr
     environment:
-      - TZ=Etc/UTC # Use TZ database name from https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
+      - TZ=${TZ:-Etc/UTC}
     restart: unless-stopped
+
+networks:
+  suwayomi-docker:
+    external: false
