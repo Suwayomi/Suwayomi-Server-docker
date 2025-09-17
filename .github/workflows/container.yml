@@ -221,8 +221,9 @@ jobs:
             ${{ inputs.tachidesk_release_type == 'stable' && 'ghcr.io/suwayomi/suwayomi-server:latest' || '' }}
             ghcr.io/suwayomi/suwayomi-server:${{ inputs.tachidesk_release_type }}
             ghcr.io/suwayomi/suwayomi-server:${{ steps.get_latest_release_metadata.outputs.release_tag }}
-        env:
-          SOURCE_DATE_EPOCH: 0
+            ghcr.io/suwayomi/suwayomi-server:${{ steps.get_latest_release_metadata.outputs.release_tag }}-${{ inputs.tachidesk_release_type }}
+          cache-from: type=registry,ref=ghcr.io/suwayomi/suwayomi-server:buildcache
+          cache-to: type=registry,ref=ghcr.io/suwayomi/suwayomi-server:buildcache,mode=max
 
       # - name: Create slim container
       #   uses: kitabisa/docker-slim-action@v1
