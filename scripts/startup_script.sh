@@ -37,6 +37,7 @@ sed -i -r "s/server.socksProxyPassword = \"(.*?)\"( #)?/server.socksProxyPasswor
 # webUI
 sed -i -r "s/server.webUIEnabled = ([0-9]+|[a-zA-Z]+)( #)?/server.webUIEnabled = ${WEB_UI_ENABLED:-\1} #/" /home/suwayomi/.local/share/Tachidesk/server.conf
 sed -i -r "s/server.webUIFlavor = \"*([a-zA-Z0-9_]+)\"*( #)?/server.webUIFlavor = ${WEB_UI_FLAVOR:-\1} #/" /home/suwayomi/.local/share/Tachidesk/server.conf
+sed -i -r "s/server.webUISubpath = \"(.*?)\"( #)?/server.webUISubpath = \"${WEBUI_SUBPATH:-\1}\" #/" /home/suwayomi/.local/share/Tachidesk/server.conf
 sed -i -r "s/server.webUIChannel = \"*([a-zA-Z0-9_]+)\"*( #)?/server.webUIChannel = ${WEB_UI_CHANNEL:-\1} #/" /home/suwayomi/.local/share/Tachidesk/server.conf
 sed -i -r "s/server.webUIUpdateCheckInterval = ([0-9]+|[a-zA-Z]+)( #)?/server.webUIUpdateCheckInterval = ${WEB_UI_UPDATE_INTERVAL:-\1} #/" /home/suwayomi/.local/share/Tachidesk/server.conf
 
