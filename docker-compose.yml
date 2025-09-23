@@ -25,7 +25,6 @@ services:
 #      - AUTH_MODE=basic_auth
 #      - AUTH_USERNAME=manga
 #      - AUTH_PASSWORD=hello123
-#      - WEBUI_SUBPATH=/manga
 #      - EXTENSION_REPOS=["http://github.com/orginazation-name/repo-name", "http://github.com/orginazation-name-2/repo-name-2"]
 
 #    example env vars for using postgreSQL database:
