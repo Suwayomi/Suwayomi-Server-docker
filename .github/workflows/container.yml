@@ -204,7 +204,9 @@ jobs:
         with:
           path: |
             ${{ runner.temp }}/tachidesk.log
+            ${{ runner.temp }}/tachidesk/server.conf
             ${{ runner.temp }}/tachidesk_env_vars.log
+            ${{ runner.temp }}/tachidesk_env_vars/server.conf
           if-no-files-found: ignore
 
       # Now we build for all the platforms we support here. NB: the amd64
