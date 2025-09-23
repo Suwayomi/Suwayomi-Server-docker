@@ -202,7 +202,6 @@ jobs:
         uses: actions/upload-artifact@v4
         if: ${{ failure() }}
         with:
-          # also implicitly named as 'artifact', will fail here!
           path: ${{ runner.temp }}/tachidesk_env_vars.log
           if-no-files-found: ignore
 
