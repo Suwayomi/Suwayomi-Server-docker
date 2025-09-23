@@ -175,10 +175,11 @@ jobs:
             -e DATABASE_URL=postgresql://localhost:5432/suwayomi \
             -e DATABASE_USERNAME=manga \
             -e DATABASE_PASSWORD=hello123 \
+            -e WEBUI_SUBPATH=/manga \
             --name=suwayomi_test \
             ${{ env.test_image_tag }}
           sleep 15
-          curl -s http://manga:hello123@127.0.0.1:4568/api/v1/settings/about/ && val_env_vars=$(curl -s http://manga:hello123@127.0.0.1:4568/api/v1/settings/about/ | grep -o "Suwayomi-Server" | sort --unique)
+          curl -s http://manga:hello123@127.0.0.1:4568/manga/api/v1/settings/about/ && val_env_vars=$(curl -s http://manga:hello123@127.0.0.1:4568/manga/api/v1/settings/about/ | grep -o "Suwayomi-Server" | sort --unique)
           docker stop suwayomi_test
           docker logs suwayomi_test > ${{ runner.temp }}/tachidesk_env_vars.log
           docker rm suwayomi_test
