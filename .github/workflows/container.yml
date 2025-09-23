@@ -202,7 +202,9 @@ jobs:
         uses: actions/upload-artifact@v4
         if: ${{ failure() }}
         with:
-          path: ${{ runner.temp }}/tachidesk_env_vars.log
+          path: |
+            ${{ runner.temp }}/tachidesk.log
+            ${{ runner.temp }}/tachidesk_env_vars.log
           if-no-files-found: ignore
 
       # Now we build for all the platforms we support here. NB: the amd64
