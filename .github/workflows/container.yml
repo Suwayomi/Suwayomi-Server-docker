@@ -198,6 +198,14 @@ jobs:
             exit 1
           fi
 
+      - name: Upload test logs if failed
+        uses: actions/upload-artifact@v4
+        if: ${{ failure() }}
+        with:
+          # also implicitly named as 'artifact', will fail here!
+          path: ${{ runner.temp }}/tachidesk_env_vars.log
+          if-no-files-found: ignore
+
       # Now we build for all the platforms we support here. NB: the amd64
       # won't be rebuilt since the local docker daemon has that still cached
       - name: Push container image to registry
