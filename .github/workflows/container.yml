@@ -175,10 +175,11 @@ jobs:
             -e DATABASE_URL=postgresql://localhost:5432/suwayomi \
             -e DATABASE_USERNAME=manga \
             -e DATABASE_PASSWORD=hello123 \
+            -e WEBUI_SUBPATH=/manga \
             --name=suwayomi_test \
             ${{ env.test_image_tag }}
           sleep 15
-          curl -s http://manga:hello123@127.0.0.1:4568/api/v1/settings/about/ && val_env_vars=$(curl -s http://manga:hello123@127.0.0.1:4568/api/v1/settings/about/ | grep -o "Suwayomi-Server" | sort --unique)
+          curl -s http://manga:hello123@127.0.0.1:4568/manga/api/v1/settings/about/ && val_env_vars=$(curl -s http://manga:hello123@127.0.0.1:4568/manga/api/v1/settings/about/ | grep -o "Suwayomi-Server" | sort --unique)
           docker stop suwayomi_test
           docker logs suwayomi_test > ${{ runner.temp }}/tachidesk_env_vars.log
           docker rm suwayomi_test
@@ -196,6 +197,17 @@ jobs:
             fi
             exit 1
           fi
+
+      - name: Upload test logs if failed
+        uses: actions/upload-artifact@v4
+        if: ${{ failure() }}
+        with:
+          path: |
+            ${{ runner.temp }}/tachidesk.log
+            ${{ runner.temp }}/tachidesk/server.conf
+            ${{ runner.temp }}/tachidesk_env_vars.log
+            ${{ runner.temp }}/tachidesk_env_vars/server.conf
+          if-no-files-found: ignore
 
       # Now we build for all the platforms we support here. NB: the amd64
       # won't be rebuilt since the local docker daemon has that still cached
