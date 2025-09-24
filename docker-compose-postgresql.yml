@@ -6,7 +6,7 @@ services:
     environment:
       - TZ=${TZ:-Etc/UTC} # Add a TZ variable to .env to change it
       - DATABASE_TYPE=POSTGRESQL
-      - DATABASE_URL=postgresql://suwayomi-postgresql:5432/${POSTGRES_DB}
+      - DATABASE_URL=postgresql://postgresql:5432/${POSTGRES_DB}
       - DATABASE_USERNAME=${POSTGRES_USER}
       - DATABASE_PASSWORD=${POSTGRES_PASSWORD}
       # Comment these out if you do not use the flaresolverr container at the bottom of this file
@@ -31,17 +31,17 @@ services:
 #      - AUTH_PASSWORD=hello123
 #      - EXTENSION_REPOS=["http://github.com/orginazation-name/repo-name", "http://github.com/orginazation-name-2/repo-name-2"]
     depends_on:
-      suwayomi-postgresql:
+      postgresql:
         condition: service_healthy
+        restart: true
     volumes:
       - ./data:/home/suwayomi/.local/share/Tachidesk
     ports:
       - "4567:4567"
     restart: on-failure:3
 
-  suwayomi-postgresql:
-    container_name: suwayomi-postgresql
-    image: postgres:17.6-alpine
+  postgresql:
+    image: postgres:17.6
     environment:
       - POSTGRES_USER=${POSTGRES_USER}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
@@ -57,13 +57,10 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+      start_period: 30s
+  
   flaresolverr:
     image: ghcr.io/thephaseless/byparr:latest
-    container_name: flaresolverr
     environment:
       - TZ=${TZ:-Etc/UTC}
     restart: unless-stopped
-
-networks:
-  suwayomi-docker:
-    external: false
