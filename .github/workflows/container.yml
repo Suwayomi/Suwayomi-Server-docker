@@ -150,6 +150,13 @@ jobs:
             -e BACKUP_TIME=13:37 \
             -e BACKUP_INTERVAL=2 \
             -e BACKUP_TTL=31 \
+            -e AUTO_BACKUP_INCLUDE_MANGA=true \
+            -e AUTO_BACKUP_INCLUDE_CATEGORIES=false \
+            -e AUTO_BACKUP_INCLUDE_CHAPTERS=false \
+            -e AUTO_BACKUP_INCLUDE_TRACKING=false \
+            -e AUTO_BACKUP_INCLUDE_HISTORY=false \
+            -e AUTO_BACKUP_INCLUDE_CLIENT_DATA=false \
+            -e AUTO_BACKUP_INCLUDE_SERVER_SETTINGS=false \
             -e FLARESOLVERR_ENABLED=true \
             -e FLARESOLVERR_URL=http://flaresolverr:8191 \
             -e FLARESOLVERR_TIMEOUT=30 \

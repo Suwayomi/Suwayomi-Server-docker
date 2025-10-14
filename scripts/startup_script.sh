@@ -90,6 +90,13 @@ sed -i -r "s/server.maxLogFolderSize = \"(.*?)\"( #)?/server.maxLogFolderSize = 
 sed -i -r "s/server.backupTime = \"(.*?)\"( #)?/server.backupTime = \"${BACKUP_TIME:-\1}\" #/" /home/suwayomi/.local/share/Tachidesk/server.conf
 sed -i -r "s/server.backupInterval = ([0-9]+|[a-zA-Z]+)( #)?/server.backupInterval = ${BACKUP_INTERVAL:-\1} #/" /home/suwayomi/.local/share/Tachidesk/server.conf
 sed -i -r "s/server.backupTTL = ([0-9]+|[a-zA-Z]+)( #)?/server.backupTTL = ${BACKUP_TTL:-\1} #/" /home/suwayomi/.local/share/Tachidesk/server.conf
+sed -i -r "s/server.autoBackupIncludeManga = ([0-9]+|[a-zA-Z]+)( #)?/server.autoBackupIncludeManga = ${AUTO_BACKUP_INCLUDE_MANGA:-\1} #/" /home/suwayomi/.local/share/Tachidesk/server.conf
+sed -i -r "s/server.autoBackupIncludeCategories = ([0-9]+|[a-zA-Z]+)( #)?/server.autoBackupIncludeCategories = ${AUTO_BACKUP_INCLUDE_CATEGORIES:-\1} #/" /home/suwayomi/.local/share/Tachidesk/server.conf
+sed -i -r "s/server.autoBackupIncludeChapters = ([0-9]+|[a-zA-Z]+)( #)?/server.autoBackupIncludeChapters = ${AUTO_BACKUP_INCLUDE_CHAPTERS:-\1} #/" /home/suwayomi/.local/share/Tachidesk/server.conf
+sed -i -r "s/server.autoBackupIncludeTracking = ([0-9]+|[a-zA-Z]+)( #)?/server.autoBackupIncludeTracking = ${AUTO_BACKUP_INCLUDE_TRACKING:-\1} #/" /home/suwayomi/.local/share/Tachidesk/server.conf
+sed -i -r "s/server.autoBackupIncludeHistory = ([0-9]+|[a-zA-Z]+)( #)?/server.autoBackupIncludeHistory = ${AUTO_BACKUP_INCLUDE_HISTORY:-\1} #/" /home/suwayomi/.local/share/Tachidesk/server.conf
+sed -i -r "s/server.autoBackupIncludeClientData = ([0-9]+|[a-zA-Z]+)( #)?/server.autoBackupIncludeClientData = ${AUTO_BACKUP_INCLUDE_CLIENT_DATA:-\1} #/" /home/suwayomi/.local/share/Tachidesk/server.conf
+sed -i -r "s/server.autoBackupIncludeServerSettings = ([0-9]+|[a-zA-Z]+)( #)?/server.autoBackupIncludeServerSettings = ${AUTO_BACKUP_INCLUDE_SERVER_SETTINGS:-\1} #/" /home/suwayomi/.local/share/Tachidesk/server.conf
 
 
 # cloudflare bypass
