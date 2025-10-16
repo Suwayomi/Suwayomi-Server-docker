@@ -56,8 +56,8 @@ RUN userdel -r ubuntu && \
     mkdir -p /home/suwayomi/.local/share/Tachidesk && \
     if command -v Xvfb; then \
       mkdir /tmp/.X11-unix && chmod 1777 /tmp/.X11-unix && \
-      cp /usr/lib/jni/libgluegen2_rt.so libgluegen_rt.so && \
-      cp /usr/lib/jni/*.so ./; \
+      cp /usr/lib/jni/libgluegen2_rt.so /home/suwayomi/libgluegen_rt.so && \
+      cp /usr/lib/jni/*.so /home/suwayomi/; \
     fi
 
 COPY scripts/create_server_conf.sh /home/suwayomi/create_server_conf.sh
