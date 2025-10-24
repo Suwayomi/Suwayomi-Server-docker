@@ -170,6 +170,7 @@ jobs:
             -e OPDS_SHOW_ONLY_UNREAD_CHAPTERS=true \
             -e OPDS_SHOW_ONLY_DOWNLOADED_CHAPTERS=true \
             -e OPDS_CHAPTER_SORT_ORDER=ASC \
+            -e OPDS_CBZ_MIME_TYPE=LEGACY \
             -e KOREADER_SYNC_SERVER_URL=http://koreader:17200 \
             -e KOREADER_SYNC_USERNAME=manga \
             -e KOREADER_SYNC_USERKEY=hello123 \
