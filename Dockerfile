@@ -1,4 +1,4 @@
-FROM eclipse-temurin:21.0.8_9-jdk-noble AS build
+FROM eclipse-temurin:25.0.1_8-jdk-noble AS build
 
 ARG TACHIDESK_ABORT_HANDLER_DOWNLOAD_URL
 
@@ -15,7 +15,7 @@ RUN if [ -n "$TACHIDESK_ABORT_HANDLER_DOWNLOAD_URL" ]; then \
       rm -rf /var/lib/apt/lists/* || exit 1; \
     fi
 
-FROM eclipse-temurin:21.0.8_9-jre-noble
+FROM eclipse-temurin:25.0.1_8-jre-noble
 
 ARG TARGETPLATFORM
 ARG TACHIDESK_KCEF=y # y or n, leave empty for auto-detection
