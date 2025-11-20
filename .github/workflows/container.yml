@@ -30,7 +30,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
         with:
           # We want a full clone of the repo so that the rev-list count below is correct
           fetch-depth: 0
