@@ -121,10 +121,6 @@ sed -i -r "s/server.opdsChapterSortOrder = \"*([a-zA-Z0-9_]+)\"*( #)?/server.opd
 sed -i -r "s/server.opdsCbzMimetype = \"*([a-zA-Z0-9_]+)\"*( #)?/server.opdsCbzMimetype = ${OPDS_CBZ_MIME_TYPE:-\1} #/" /home/suwayomi/.local/share/Tachidesk/server.conf
 
 # koreader
-sed -i -r "s|server.koreaderSyncServerUrl = \"(.*?)\"( #)?|server.koreaderSyncServerUrl = \"${KOREADER_SYNC_SERVER_URL:-\1}\" #|" /home/suwayomi/.local/share/Tachidesk/server.conf
-sed -i -r "s/server.koreaderSyncUsername = \"(.*?)\"( #)?/server.koreaderSyncUsername = \"${KOREADER_SYNC_USERNAME:-\1}\" #/" /home/suwayomi/.local/share/Tachidesk/server.conf
-sed -i -r "s/server.koreaderSyncUserkey = \"(.*?)\"( #)?/server.koreaderSyncUserkey = \"${KOREADER_SYNC_USERKEY:-\1}\" #/" /home/suwayomi/.local/share/Tachidesk/server.conf
-sed -i -r "s/server.koreaderSyncDeviceId = \"(.*?)\"( #)?/server.koreaderSyncDeviceId = \"${KOREADER_SYNC_DEVICE_ID:-\1}\" #/" /home/suwayomi/.local/share/Tachidesk/server.conf
 sed -i -r "s/server.koreaderSyncChecksumMethod = \"*([a-zA-Z0-9_]+)\"*( #)?/server.koreaderSyncChecksumMethod = ${KOREADER_SYNC_CHECKSUM_METHOD:-\1} #/" /home/suwayomi/.local/share/Tachidesk/server.conf
 sed -i -r "s/server.koreaderSyncPercentageTolerance = ([-0-9\.Ee]+)?( #)/server.koreaderSyncPercentageTolerance = ${KOREADER_SYNC_PERCENTAGE_TOLERANCE:-\1} #/" /home/suwayomi/.local/share/Tachidesk/server.conf
 sed -i -r "s/server.koreaderSyncStrategyForward = \"*([a-zA-Z0-9_]+)\"*( #)?/server.koreaderSyncStrategyForward = ${KOREADER_SYNC_STRATEGY_FORWARD:-\1} #/" /home/suwayomi/.local/share/Tachidesk/server.conf
