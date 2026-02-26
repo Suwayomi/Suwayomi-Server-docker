@@ -42,7 +42,7 @@ services:
     restart: on-failure:3
 
   postgresql:
-    image: postgres:17.6
+    image: postgres:17.9
     environment:
       - POSTGRES_USER=${POSTGRES_USER}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
