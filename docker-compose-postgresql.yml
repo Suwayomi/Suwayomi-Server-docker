@@ -65,5 +65,5 @@ services:
     container_name: flaresolverr
     init: true
     environment:
-      - TZ=Etc/UTC # Use TZ database name from https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
+      - TZ=${TZ:-Etc/UTC}
     restart: unless-stopped
