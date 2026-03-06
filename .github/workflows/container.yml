@@ -66,7 +66,7 @@ jobs:
       # this only builds the amd64 version of the image, which is fine as that's
       # all that is needed to test the container on GitHub Actions' build servers (which are running amd64 CPUs)
       - name: Build container image to test
-        uses: docker/build-push-action@v6
+        uses: docker/build-push-action@v7
         with:
           load: true # this is important, as this tells build-push-action to save the container to the local docker daemon
           build-args: |
@@ -207,7 +207,7 @@ jobs:
       # won't be rebuilt since the local docker daemon has that still cached
       - name: Push container image to registry
         if: inputs.do_upload
-        uses: docker/build-push-action@v6
+        uses: docker/build-push-action@v7
         with:
           platforms: linux/amd64,linux/arm64/v8,linux/ppc64le,linux/s390x
           push: true
