@@ -30,6 +30,9 @@ Use the template [docker-compose.yml](./docker-compose.yml) in this repo for cre
 > [!Tip]
 > Most of the time you don't need to use environment variables, instead settings can be changed during runtime via the webUI. (which will be rendered useless when providing an environment variable)
 
+> [!Tip]
+> Passwords can be provided as files, by appending `_FILE` to the variable name. FOr example, you can set `SOCKS_PROXY_PASSWORD_FILE=/path/to/myfile` to have Suwayomi set the socks proxy password using "myfile" content.
+
 > [!NOTE]
 > See [server-reference.conf](https://github.com/Suwayomi/Suwayomi-Server/blob/master/server/src/main/resources/server-reference.conf) in the [Suwayomi-Server](https://github.com/Suwayomi/Suwayomi-Server) repository for the default values
 

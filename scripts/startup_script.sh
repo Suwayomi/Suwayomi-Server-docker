@@ -11,6 +11,21 @@ echo "Suwayomi data location inside the container: /home/suwayomi/.local/share/T
 # set default values for environment variables:
 export TZ="${TZ:-Etc/UTC}"
 
+# Getting passwords from files
+if [ -f "${SOCKS_PROXY_PASSWORD_FILE}" ]; then
+    export SOCKS_PROXY_PASSWORD=$(cat "${SOCKS_PROXY_PASSWORD_FILE}")
+fi
+if [ -f "${AUTH_PASSWORD_FILE}" ]; then
+    export AUTH_PASSWORD=$(cat "${AUTH_PASSWORD_FILE}")
+fi
+if [ -f "${BASIC_AUTH_PASSWORD_FILE}" ]; then
+    export BASIC_AUTH_PASSWORD=$(cat "${BASIC_AUTH_PASSWORD_FILE}")
+fi
+if [ -f "${DATABASE_PASSWORD_FILE}" ]; then
+    export DATABASE_PASSWORD=$(cat "${DATABSE_PASSWORD_FILE}")
+fi
+
+
 # Set default values for settings
 sed -i -r "s/server.initialOpenInBrowserEnabled = ([0-9]+|[a-zA-Z]+)( #)?/server.initialOpenInBrowserEnabled = false #/" /home/suwayomi/.local/share/Tachidesk/server.conf
 sed -i -r "s/server.systemTrayEnabled = ([0-9]+|[a-zA-Z]+)( #)?/server.systemTrayEnabled = false #/" /home/suwayomi/.local/share/Tachidesk/server.conf
