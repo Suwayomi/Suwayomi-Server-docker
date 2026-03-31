@@ -22,6 +22,10 @@ By default, docker stores logs indefinitely, you can [set up logging globally](h
 
 Use the template [docker-compose.yml](./docker-compose.yml) in this repo for creating and starting tachidesk docker container.
 
+### Podman Quadlet
+
+Use the template [suwayomi-server.container](./suwayomi-server.container) in this repo for creating and starting Suwayomi as a rootless Podman container.
+
 # Environment Variables
 
 > [!CAUTION]
