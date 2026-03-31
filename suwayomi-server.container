@@ -1,0 +1,26 @@
+# Rootless quadlet files are placed in $HOME/.config/containers/systemd
+
+[Container]
+Environment=TZ=Etc/UTC # Use TZ database name from https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
+Image=ghcr.io/suwayomi/suwayomi-server:preview
+PublishPort=4567:4567
+
+UserNS=keep-id
+# Without UserNS=keep-id, the container's UID 1000 would map to a diffferent host UID which probably doesn't own the bind-mounted directory below
+
+Volume=/path/to/downloads:/home/suwayomi/.local/share/Tachidesk/downloads:Z
+# Podman will not create the directory automatically so make sure to create it beforehand
+# On systems with SELinux, add the :Z flag otherwise SELinux will block the container from accessing the directory
+
+Volume=suwayomi-data.volume:/home/suwayomi/.local/share/Tachidesk
+# Named volumes should be defined in a .volume quadlet otherwise Podman will assign the root of the volume to container UID 0
+# $ cat $HOME/.config/containers/systemd/suwayomi-data.volume
+# [Volume]
+# VolumeName=suwayomi-data
+
+[Install]
+WantedBy=default.target
+# Sets Suwayomi to start on boot
+
+[Service]
+Restart=on-failure
