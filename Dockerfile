@@ -37,7 +37,7 @@ RUN if [ "$TACHIDESK_KCEF" = "y" ] || ([ "$TACHIDESK_KCEF" = "" ] && ([ "$TARGET
       apt-get update && \
       apt-get -y install --no-install-recommends -y libxss1 libxext6 libxrender1 libxcomposite1 libxdamage1 libxkbcommon0 libxtst6 \
           libjogl2-jni libgluegen2-jni libglib2.0-0t64 libnss3 libdbus-1-3 libpango-1.0-0 libcairo2 libasound2t64 \
-          libatk-bridge2.0-0t64 libcups2t64 libdrm2 libgbm1 libegl1 libgl1-mesa-dri xvfb \
+          libatk-bridge2.0-0t64 libcups2t64 libdrm2 libgbm1 libegl1 xvfb \
           curl jq gawk findutils && \
       /root/kcef_download.sh "$TACHIDESK_KCEF_RELEASE_URL" "$TARGETPLATFORM" && \
       apt-get clean && \
