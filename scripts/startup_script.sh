@@ -158,6 +158,7 @@ if command -v Xvfb >/dev/null; then
       mkdir -p /home/suwayomi/.local/share/Tachidesk/bin
     fi
     if [ ! -d /home/suwayomi/.local/share/Tachidesk/bin/kcef ] && [ ! -L /home/suwayomi/.local/share/Tachidesk/bin/kcef ]; then
+      rm -rf /home/suwayomi/.local/share/Tachidesk/bin/kcef
       ln -s /opt/kcef/jcef /home/suwayomi/.local/share/Tachidesk/bin/kcef
     fi
   fi
