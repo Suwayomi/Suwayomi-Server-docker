@@ -68,8 +68,9 @@ fi
 set -xe
 tar -C "$expath" -xf "$arpath"
 libfolder="`find "$expath" -type d -name lib`"
+releasefile="`find "$expath" -type f -name release`"
 
-if [ -z "$libfolder" ]; then
+if [ -z "$libfolder" ] || [ -z "$releasefile" ]; then
   echo "lib folder not found in extracted archive, aborting"
   rm -rf /tmp/kcef
   exit 0
@@ -78,6 +79,7 @@ fi
 mkdir -p "$installdir"
 rmdir "$installdir" # we abuse -p to make sure all parent directories are created, then delete the actual target, since mv would move the libfolder inside otherwise
 mv "$libfolder" "$installdir"
+mv "$releasefile" "$installdir"
 chmod -R a+x "$installdir"
 touch "$installdir/install.lock"
 rm -rf /tmp/kcef
