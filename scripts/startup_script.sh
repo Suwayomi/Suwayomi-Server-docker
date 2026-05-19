@@ -148,6 +148,8 @@ sed -i -r "s/server.databaseUsername = \"(.*?)\"( #)?/server.databaseUsername = 
 sed -i -r "s/server.databasePassword = \"(.*?)\"( #)?/server.databasePassword = \"${DATABASE_PASSWORD:-\1}\" #/" /home/suwayomi/.local/share/Tachidesk/server.conf
 sed -i -r "s/server.useHikariConnectionPool = ([0-9]+|[a-zA-Z]+)( #)?/server.useHikariConnectionPool = ${USE_HIKARI_CONNECTION_POOL:-\1} #/" /home/suwayomi/.local/share/Tachidesk/server.conf
 
+sed -i -r "s/server.kcefEnabled = ([0-9]+|[a-zA-Z]+)( #)?/server.kcefEnabled = ${KCEF_ENABLED:-\1} #/" /home/suwayomi/.local/share/Tachidesk/server.conf
+
 rm -rf /home/suwayomi/.local/share/Tachidesk/cache/kcef/Singleton*
 
 if command -v Xvfb >/dev/null; then
