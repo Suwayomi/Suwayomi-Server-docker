@@ -63,6 +63,15 @@ jobs:
           echo "tachidesk_docker_git_commit=$tachidesk_docker_git_commit" >> $GITHUB_OUTPUT
           echo "build_date=$build_date" >> $GITHUB_OUTPUT
 
+          tmp="$(mktemp -d)"
+          curl -# -L "$release_url" -o "$tmp/server.jar"
+          (cd "$tmp"; jar xvf server.jar META-INF/MANIFEST.MF)
+          cat "$tmp/META-INF/MANIFEST.MF"
+          jbr_release_tag="$(cat "$tmp/META-INF/MANIFEST.MF" | grep X-JBR-Release | sed 's/X-JBR-Release:\| //g')"
+          [ -n "$jbr_release_tag" ] || jbr_release_tag="jbr-release-21.0.10b1163.108"
+          rm -rf "$tmp"
+          echo "jbr_release_tag=$jbr_release_tag" >> $GITHUB_OUTPUT
+
       # this only builds the amd64 version of the image, which is fine as that's
       # all that is needed to test the container on GitHub Actions' build servers (which are running amd64 CPUs)
       - name: Build container image to test
@@ -218,7 +227,7 @@ jobs:
             TACHIDESK_FILENAME=${{ steps.get_latest_release_metadata.outputs.release_filename }}
             TACHIDESK_DOCKER_GIT_COMMIT=${{ steps.get_latest_release_metadata.outputs.tachidesk_docker_git_commit }}
             TACHIDESK_KCEF=
-            TACHIDESK_KCEF_RELEASE_URL=https://api.github.com/repos/JetBrains/JetBrainsRuntime/releases/tags/jbr-release-21.0.10b1163.108
+            TACHIDESK_KCEF_RELEASE_URL=https://api.github.com/repos/JetBrains/JetBrainsRuntime/releases/tags/${{ steps.get_latest_release_metadata.outputs.jbr_release_tag }}
             TACHIDESK_ABORT_HANDLER_DOWNLOAD_URL=https://raw.githubusercontent.com/Suwayomi/Suwayomi-Server/refs/heads/master/scripts/resources/catch_abort.c
           tags: |
             ${{ inputs.tachidesk_release_type == 'stable' && 'ghcr.io/suwayomi/tachidesk:latest' || '' }}
