@@ -191,6 +191,15 @@ jobs:
             -e DATABASE_PASSWORD=hello123 \
             -e USE_HIKARI_CONNECTION_POOL=false \
             -e KCEF_ENABLED=false \
+            -e SYNCYOMI_ENABLED=false \
+            -e SYNCYOMI_HOST=http://localhost:8282 \
+            -e SYNCYOMI_API_KEY=hello123 \
+            -e SYNC_DATA_MANGA=false \
+            -e SYNC_DATA_CHAPTERS=false \
+            -e SYNC_DATA_TRACKING=false \
+            -e SYNC_DATA_HISTORY=false \
+            -e SYNC_DATA_CATEGORIES=false \
+            -e SYNC_INTERVAL=30m \
             --name=suwayomi_test \
             ${{ env.test_image_tag }}
           sleep 15
