@@ -148,7 +148,19 @@ sed -i -r "s/server.databaseUsername = \"(.*?)\"( #)?/server.databaseUsername = 
 sed -i -r "s/server.databasePassword = \"(.*?)\"( #)?/server.databasePassword = \"${DATABASE_PASSWORD:-\1}\" #/" /home/suwayomi/.local/share/Tachidesk/server.conf
 sed -i -r "s/server.useHikariConnectionPool = ([0-9]+|[a-zA-Z]+)( #)?/server.useHikariConnectionPool = ${USE_HIKARI_CONNECTION_POOL:-\1} #/" /home/suwayomi/.local/share/Tachidesk/server.conf
 
+# webview
 sed -i -r "s/server.kcefEnabled = ([0-9]+|[a-zA-Z]+)( #)?/server.kcefEnabled = ${KCEF_ENABLED:-\1} #/" /home/suwayomi/.local/share/Tachidesk/server.conf
+
+# sync
+sed -i -r "s/server.syncYomiEnabled = ([0-9]+|[a-zA-Z]+)( #)?/server.syncYomiEnabled = ${SYNCYOMI_ENABLED:-\1} #/" /home/suwayomi/.local/share/Tachidesk/server.conf
+sed -i -r "s|server.syncYomiHost = \"(.*?)\"( #)?|server.syncYomiHost = \"${SYNCYOMI_HOST:-\1}\" #|" /home/suwayomi/.local/share/Tachidesk/server.conf
+sed -i -r "s|server.syncYomiApiKey = \"(.*?)\"( #)?|server.syncYomiApiKey = \"${SYNCYOMI_API_KEY:-\1}\" #|" /home/suwayomi/.local/share/Tachidesk/server.conf
+sed -i -r "s/server.syncDataManga = ([0-9]+|[a-zA-Z]+)( #)?/server.syncDataManga = ${SYNC_DATA_MANGA:-\1} #/" /home/suwayomi/.local/share/Tachidesk/server.conf
+sed -i -r "s/server.syncDataChapters = ([0-9]+|[a-zA-Z]+)( #)?/server.syncDataChapters = ${SYNC_DATA_CHAPTERS:-\1} #/" /home/suwayomi/.local/share/Tachidesk/server.conf
+sed -i -r "s/server.syncDataTracking = ([0-9]+|[a-zA-Z]+)( #)?/server.syncDataTracking = ${SYNC_DATA_TRACKING:-\1} #/" /home/suwayomi/.local/share/Tachidesk/server.conf
+sed -i -r "s/server.syncDataHistory = ([0-9]+|[a-zA-Z]+)( #)?/server.syncDataHistory = ${SYNC_DATA_HISTORY:-\1} #/" /home/suwayomi/.local/share/Tachidesk/server.conf
+sed -i -r "s/server.syncDataCategories = ([0-9]+|[a-zA-Z]+)( #)?/server.syncDataCategories = ${SYNC_DATA_CATEGORIES:-\1} #/" /home/suwayomi/.local/share/Tachidesk/server.conf
+sed -i -r "s/server.syncInterval = \"(.*?)\"( #)?/server.syncInterval = \"${SYNC_INTERVAL:-\1}\" #/" /home/suwayomi/.local/share/Tachidesk/server.conf
 
 rm -rf /home/suwayomi/.local/share/Tachidesk/cache/kcef/Singleton*
 
