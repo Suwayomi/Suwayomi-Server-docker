@@ -35,8 +35,8 @@ COPY scripts/kcef_download.sh /root/kcef_download.sh
 # install CEF dependencies
 RUN if [ "$TACHIDESK_KCEF" = "y" ] || ([ "$TACHIDESK_KCEF" = "" ] && ([ "$TARGETPLATFORM" = "linux/amd64" ] || [ "$TARGETPLATFORM" = "linux/arm64" ])); then \
       apt-get update && \
-      apt-get -y install --no-install-recommends -y libxss1 libxext6 libxrender1 libxcomposite1 libxdamage1 libxkbcommon0 libxtst6 \
-          libjogl2-jni libgluegen2-jni libglib2.0-0t64 libnss3 libdbus-1-3 libpango-1.0-0 libcairo2 libasound2t64 \
+      apt-get -y install --no-install-recommends -y libxss1 libxext6 libxrender1 libxcomposite1 libxdamage1 libxkbcommon0 libxtst6 libxcursor1 \
+          libglib2.0-0t64 libnss3 libdbus-1-3 libpango-1.0-0 libcairo2 libasound2t64 \
           libatk-bridge2.0-0t64 libcups2t64 libdrm2 libgbm1 libegl1 xvfb \
           curl jq gawk findutils && \
       /root/kcef_download.sh "$TACHIDESK_KCEF_RELEASE_URL" "$TARGETPLATFORM" && \
@@ -55,9 +55,7 @@ RUN userdel -r ubuntu && \
     useradd  --uid 1000 --gid suwayomi --no-log-init -G audio,video suwayomi && \
     mkdir -p /home/suwayomi/.local/share/Tachidesk && \
     if command -v Xvfb; then \
-      mkdir /tmp/.X11-unix && chmod 1777 /tmp/.X11-unix && \
-      cp /usr/lib/jni/libgluegen2_rt.so /home/suwayomi/libgluegen_rt.so && \
-      cp /usr/lib/jni/*.so /home/suwayomi/; \
+      mkdir /tmp/.X11-unix && chmod 1777 /tmp/.X11-unix; \
     fi
 
 COPY scripts/create_server_conf.sh /home/suwayomi/create_server_conf.sh
