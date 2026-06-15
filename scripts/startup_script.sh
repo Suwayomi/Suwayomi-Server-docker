@@ -137,6 +137,7 @@ sed -i -r "s/server.opdsShowOnlyUnreadChapters = ([0-9]+|[a-zA-Z]+)( #)?/server.
 sed -i -r "s/server.opdsShowOnlyDownloadedChapters = ([0-9]+|[a-zA-Z]+)( #)?/server.opdsShowOnlyDownloadedChapters = ${OPDS_SHOW_ONLY_DOWNLOADED_CHAPTERS:-\1} #/" /home/suwayomi/.local/share/Tachidesk/server.conf
 sed -i -r "s/server.opdsChapterSortOrder = \"*([a-zA-Z0-9_]+)\"*( #)?/server.opdsChapterSortOrder = ${OPDS_CHAPTER_SORT_ORDER:-\1} #/" /home/suwayomi/.local/share/Tachidesk/server.conf
 sed -i -r "s/server.opdsCbzMimetype = \"*([a-zA-Z0-9_]+)\"*( #)?/server.opdsCbzMimetype = ${OPDS_CBZ_MIME_TYPE:-\1} #/" /home/suwayomi/.local/share/Tachidesk/server.conf
+sed -i -r "s/server.opdsSkipChapterMetadataFeed = ([0-9]+|[a-zA-Z]+)( #)?/server.opdsSkipChapterMetadataFeed = ${OPDS_SKIP_CHAPTER_METADATA_FEED:-\1} #/" /home/suwayomi/.local/share/Tachidesk/server.conf
 
 # koreader
 sed -i -r "s/server.koreaderSyncChecksumMethod = \"*([a-zA-Z0-9_]+)\"*( #)?/server.koreaderSyncChecksumMethod = ${KOREADER_SYNC_CHECKSUM_METHOD:-\1} #/" /home/suwayomi/.local/share/Tachidesk/server.conf
