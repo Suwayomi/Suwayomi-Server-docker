@@ -181,6 +181,7 @@ jobs:
             -e OPDS_SHOW_ONLY_DOWNLOADED_CHAPTERS=true \
             -e OPDS_CHAPTER_SORT_ORDER=ASC \
             -e OPDS_CBZ_MIME_TYPE=LEGACY \
+            -e OPDS_SKIP_CHAPTER_METADATA_FEED=true \
             -e KOREADER_SYNC_CHECKSUM_METHOD=filename \
             -e KOREADER_SYNC_PERCENTAGE_TOLERANCE=0.001 \
             -e KOREADER_SYNC_STRATEGY_FORWARD=disabled \
