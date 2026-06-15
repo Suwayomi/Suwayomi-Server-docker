@@ -30,19 +30,19 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
         with:
           # We want a full clone of the repo so that the rev-list count below is correct
           fetch-depth: 0
 
       - name: Set up QEMU
-        uses: docker/setup-qemu-action@v3
+        uses: docker/setup-qemu-action@v4
 
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
+        uses: docker/setup-buildx-action@v4
 
       - name: Login to GitHub Container Registry
-        uses: docker/login-action@v3
+        uses: docker/login-action@v4
         with:
           registry: ghcr.io
           username: ${{ github.repository_owner }}
@@ -63,10 +63,19 @@ jobs:
           echo "tachidesk_docker_git_commit=$tachidesk_docker_git_commit" >> $GITHUB_OUTPUT
           echo "build_date=$build_date" >> $GITHUB_OUTPUT
 
+          tmp="$(mktemp -d)"
+          curl -# -L "$release_url" -o "$tmp/server.jar"
+          (cd "$tmp"; jar xvf server.jar META-INF/MANIFEST.MF)
+          cat "$tmp/META-INF/MANIFEST.MF"
+          jbr_release_tag="$(cat "$tmp/META-INF/MANIFEST.MF" | grep X-JBR-Release | sed 's/X-JBR-Release:\| //g')"
+          [ -n "$jbr_release_tag" ] || jbr_release_tag="jbr-release-21.0.10b1163.108"
+          rm -rf "$tmp"
+          echo "jbr_release_tag=$jbr_release_tag" >> $GITHUB_OUTPUT
+
       # this only builds the amd64 version of the image, which is fine as that's
       # all that is needed to test the container on GitHub Actions' build servers (which are running amd64 CPUs)
       - name: Build container image to test
-        uses: docker/build-push-action@v6
+        uses: docker/build-push-action@v7
         with:
           load: true # this is important, as this tells build-push-action to save the container to the local docker daemon
           build-args: |
@@ -140,6 +149,7 @@ jobs:
             -e AUTO_DOWNLOAD_NEW_CHAPTERS_LIMIT=5 \
             -e AUTO_DOWNLOAD_IGNORE_REUPLOADS=false \
             -e DOWNLOAD_CONVERSIONS="{ \"image/filetype\" = { target = \"image/filetype\" }, \"image/filetype\" = { target = \"image/filetype\" } }" \
+            -e SERVE_CONVERSIONS="{ \"image/filetype\" = { target = \"image/filetype\" }, \"image/filetype\" = { target = \"image/filetype\" } }" \
             -e EXTENSION_REPOS=[\"http://github.com/orginazation-name/repo-name\",\"http://github.com/orginazation-name-2/repo-name-2\"] \
             -e MAX_SOURCES_IN_PARALLEL=12 \
             -e UPDATE_EXCLUDE_UNREAD=false \
@@ -150,6 +160,13 @@ jobs:
             -e BACKUP_TIME=13:37 \
             -e BACKUP_INTERVAL=2 \
             -e BACKUP_TTL=31 \
+            -e AUTO_BACKUP_INCLUDE_MANGA=true \
+            -e AUTO_BACKUP_INCLUDE_CATEGORIES=false \
+            -e AUTO_BACKUP_INCLUDE_CHAPTERS=false \
+            -e AUTO_BACKUP_INCLUDE_TRACKING=false \
+            -e AUTO_BACKUP_INCLUDE_HISTORY=false \
+            -e AUTO_BACKUP_INCLUDE_CLIENT_DATA=false \
+            -e AUTO_BACKUP_INCLUDE_SERVER_SETTINGS=false \
             -e FLARESOLVERR_ENABLED=true \
             -e FLARESOLVERR_URL=http://flaresolverr:8191 \
             -e FLARESOLVERR_TIMEOUT=30 \
@@ -163,10 +180,8 @@ jobs:
             -e OPDS_SHOW_ONLY_UNREAD_CHAPTERS=true \
             -e OPDS_SHOW_ONLY_DOWNLOADED_CHAPTERS=true \
             -e OPDS_CHAPTER_SORT_ORDER=ASC \
-            -e KOREADER_SYNC_SERVER_URL=http://koreader:17200 \
-            -e KOREADER_SYNC_USERNAME=manga \
-            -e KOREADER_SYNC_USERKEY=hello123 \
-            -e KOREADER_SYNC_DEVICE_ID=100 \
+            -e OPDS_CBZ_MIME_TYPE=LEGACY \
+            -e OPDS_SKIP_CHAPTER_METADATA_FEED=true \
             -e KOREADER_SYNC_CHECKSUM_METHOD=filename \
             -e KOREADER_SYNC_PERCENTAGE_TOLERANCE=0.001 \
             -e KOREADER_SYNC_STRATEGY_FORWARD=disabled \
@@ -176,6 +191,17 @@ jobs:
             -e DATABASE_USERNAME=manga \
             -e DATABASE_PASSWORD=hello123 \
             -e WEBUI_SUBPATH=/manga \
+            -e USE_HIKARI_CONNECTION_POOL=false \
+            -e KCEF_ENABLED=false \
+            -e SYNCYOMI_ENABLED=false \
+            -e SYNCYOMI_HOST=http://localhost:8282 \
+            -e SYNCYOMI_API_KEY=hello123 \
+            -e SYNC_DATA_MANGA=false \
+            -e SYNC_DATA_CHAPTERS=false \
+            -e SYNC_DATA_TRACKING=false \
+            -e SYNC_DATA_HISTORY=false \
+            -e SYNC_DATA_CATEGORIES=false \
+            -e SYNC_INTERVAL=30m \
             --name=suwayomi_test \
             ${{ env.test_image_tag }}
           sleep 15
@@ -213,9 +239,9 @@ jobs:
       # won't be rebuilt since the local docker daemon has that still cached
       - name: Push container image to registry
         if: inputs.do_upload
-        uses: docker/build-push-action@v6
+        uses: docker/build-push-action@v7
         with:
-          platforms: linux/amd64,linux/arm64/v8,linux/ppc64le,linux/s390x,linux/riscv64
+          platforms: linux/amd64,linux/arm64/v8,linux/ppc64le,linux/s390x
           push: true
           build-args: |
             BUILD_DATE=${{ steps.get_latest_release_metadata.outputs.build_date }}
@@ -224,7 +250,7 @@ jobs:
             TACHIDESK_FILENAME=${{ steps.get_latest_release_metadata.outputs.release_filename }}
             TACHIDESK_DOCKER_GIT_COMMIT=${{ steps.get_latest_release_metadata.outputs.tachidesk_docker_git_commit }}
             TACHIDESK_KCEF=
-            TACHIDESK_KCEF_RELEASE_URL=https://api.github.com/repos/JetBrains/JetBrainsRuntime/releases/latest
+            TACHIDESK_KCEF_RELEASE_URL=https://api.github.com/repos/JetBrains/JetBrainsRuntime/releases/tags/${{ steps.get_latest_release_metadata.outputs.jbr_release_tag }}
             TACHIDESK_ABORT_HANDLER_DOWNLOAD_URL=https://raw.githubusercontent.com/Suwayomi/Suwayomi-Server/refs/heads/master/scripts/resources/catch_abort.c
           tags: |
             ${{ inputs.tachidesk_release_type == 'stable' && 'ghcr.io/suwayomi/tachidesk:latest' || '' }}

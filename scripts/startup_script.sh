@@ -11,6 +11,24 @@ echo "Suwayomi data location inside the container: /home/suwayomi/.local/share/T
 # set default values for environment variables:
 export TZ="${TZ:-Etc/UTC}"
 
+# Getting passwords from files
+if [ -f "${SOCKS_PROXY_PASSWORD_FILE}" ]; then
+    export SOCKS_PROXY_PASSWORD=$(cat "${SOCKS_PROXY_PASSWORD_FILE}")
+fi
+if [ -f "${AUTH_PASSWORD_FILE}" ]; then
+    export AUTH_PASSWORD=$(cat "${AUTH_PASSWORD_FILE}")
+fi
+if [ -f "${BASIC_AUTH_PASSWORD_FILE}" ]; then
+    export BASIC_AUTH_PASSWORD=$(cat "${BASIC_AUTH_PASSWORD_FILE}")
+fi
+if [ -f "${DATABASE_PASSWORD_FILE}" ]; then
+    export DATABASE_PASSWORD=$(cat "${DATABSE_PASSWORD_FILE}")
+fi
+if [ -f "${SYNCYOMI_API_KEY_FILE}" ]; then
+    export SYNCYOMI_API_KEY=$(cat "${SYNCYOMI_API_KEY_FILE}")
+fi
+
+
 # Set default values for settings
 sed -i -r "s/server.initialOpenInBrowserEnabled = ([0-9]+|[a-zA-Z]+)( #)?/server.initialOpenInBrowserEnabled = false #/" /home/suwayomi/.local/share/Tachidesk/server.conf
 sed -i -r "s/server.systemTrayEnabled = ([0-9]+|[a-zA-Z]+)( #)?/server.systemTrayEnabled = false #/" /home/suwayomi/.local/share/Tachidesk/server.conf
@@ -49,6 +67,9 @@ sed -i -r "s/server.autoDownloadNewChaptersLimit = ([0-9]+|[a-zA-Z]+)( #)?/serve
 sed -i -r "s/server.autoDownloadIgnoreReUploads = ([0-9]+|[a-zA-Z]+)( #)?/server.autoDownloadIgnoreReUploads = ${AUTO_DOWNLOAD_IGNORE_REUPLOADS:-\1} #/" /home/suwayomi/.local/share/Tachidesk/server.conf
 if [ -n "$DOWNLOAD_CONVERSIONS" ]; then
     perl -0777 -i -pe 's/server\.downloadConversions = ({[^#]*?}}?)/server.downloadConversions = $ENV{DOWNLOAD_CONVERSIONS}/gs' /home/suwayomi/.local/share/Tachidesk/server.conf
+fi
+if [ -n "$SERVE_CONVERSIONS" ]; then
+    perl -0777 -i -pe 's/server\.serveConversions = ({[^#]*?}}?)/server.serveConversions = $ENV{SERVE_CONVERSIONS}/gs' /home/suwayomi/.local/share/Tachidesk/server.conf
 fi
 
 # extension repos
@@ -91,6 +112,13 @@ sed -i -r "s/server.maxLogFolderSize = \"(.*?)\"( #)?/server.maxLogFolderSize = 
 sed -i -r "s/server.backupTime = \"(.*?)\"( #)?/server.backupTime = \"${BACKUP_TIME:-\1}\" #/" /home/suwayomi/.local/share/Tachidesk/server.conf
 sed -i -r "s/server.backupInterval = ([0-9]+|[a-zA-Z]+)( #)?/server.backupInterval = ${BACKUP_INTERVAL:-\1} #/" /home/suwayomi/.local/share/Tachidesk/server.conf
 sed -i -r "s/server.backupTTL = ([0-9]+|[a-zA-Z]+)( #)?/server.backupTTL = ${BACKUP_TTL:-\1} #/" /home/suwayomi/.local/share/Tachidesk/server.conf
+sed -i -r "s/server.autoBackupIncludeManga = ([0-9]+|[a-zA-Z]+)( #)?/server.autoBackupIncludeManga = ${AUTO_BACKUP_INCLUDE_MANGA:-\1} #/" /home/suwayomi/.local/share/Tachidesk/server.conf
+sed -i -r "s/server.autoBackupIncludeCategories = ([0-9]+|[a-zA-Z]+)( #)?/server.autoBackupIncludeCategories = ${AUTO_BACKUP_INCLUDE_CATEGORIES:-\1} #/" /home/suwayomi/.local/share/Tachidesk/server.conf
+sed -i -r "s/server.autoBackupIncludeChapters = ([0-9]+|[a-zA-Z]+)( #)?/server.autoBackupIncludeChapters = ${AUTO_BACKUP_INCLUDE_CHAPTERS:-\1} #/" /home/suwayomi/.local/share/Tachidesk/server.conf
+sed -i -r "s/server.autoBackupIncludeTracking = ([0-9]+|[a-zA-Z]+)( #)?/server.autoBackupIncludeTracking = ${AUTO_BACKUP_INCLUDE_TRACKING:-\1} #/" /home/suwayomi/.local/share/Tachidesk/server.conf
+sed -i -r "s/server.autoBackupIncludeHistory = ([0-9]+|[a-zA-Z]+)( #)?/server.autoBackupIncludeHistory = ${AUTO_BACKUP_INCLUDE_HISTORY:-\1} #/" /home/suwayomi/.local/share/Tachidesk/server.conf
+sed -i -r "s/server.autoBackupIncludeClientData = ([0-9]+|[a-zA-Z]+)( #)?/server.autoBackupIncludeClientData = ${AUTO_BACKUP_INCLUDE_CLIENT_DATA:-\1} #/" /home/suwayomi/.local/share/Tachidesk/server.conf
+sed -i -r "s/server.autoBackupIncludeServerSettings = ([0-9]+|[a-zA-Z]+)( #)?/server.autoBackupIncludeServerSettings = ${AUTO_BACKUP_INCLUDE_SERVER_SETTINGS:-\1} #/" /home/suwayomi/.local/share/Tachidesk/server.conf
 
 
 # cloudflare bypass
@@ -109,12 +137,10 @@ sed -i -r "s/server.opdsMarkAsReadOnDownload = ([0-9]+|[a-zA-Z]+)( #)?/server.op
 sed -i -r "s/server.opdsShowOnlyUnreadChapters = ([0-9]+|[a-zA-Z]+)( #)?/server.opdsShowOnlyUnreadChapters = ${OPDS_SHOW_ONLY_UNREAD_CHAPTERS:-\1} #/" /home/suwayomi/.local/share/Tachidesk/server.conf
 sed -i -r "s/server.opdsShowOnlyDownloadedChapters = ([0-9]+|[a-zA-Z]+)( #)?/server.opdsShowOnlyDownloadedChapters = ${OPDS_SHOW_ONLY_DOWNLOADED_CHAPTERS:-\1} #/" /home/suwayomi/.local/share/Tachidesk/server.conf
 sed -i -r "s/server.opdsChapterSortOrder = \"*([a-zA-Z0-9_]+)\"*( #)?/server.opdsChapterSortOrder = ${OPDS_CHAPTER_SORT_ORDER:-\1} #/" /home/suwayomi/.local/share/Tachidesk/server.conf
+sed -i -r "s/server.opdsCbzMimetype = \"*([a-zA-Z0-9_]+)\"*( #)?/server.opdsCbzMimetype = ${OPDS_CBZ_MIME_TYPE:-\1} #/" /home/suwayomi/.local/share/Tachidesk/server.conf
+sed -i -r "s/server.opdsSkipChapterMetadataFeed = ([0-9]+|[a-zA-Z]+)( #)?/server.opdsSkipChapterMetadataFeed = ${OPDS_SKIP_CHAPTER_METADATA_FEED:-\1} #/" /home/suwayomi/.local/share/Tachidesk/server.conf
 
 # koreader
-sed -i -r "s|server.koreaderSyncServerUrl = \"(.*?)\"( #)?|server.koreaderSyncServerUrl = \"${KOREADER_SYNC_SERVER_URL:-\1}\" #|" /home/suwayomi/.local/share/Tachidesk/server.conf
-sed -i -r "s/server.koreaderSyncUsername = \"(.*?)\"( #)?/server.koreaderSyncUsername = \"${KOREADER_SYNC_USERNAME:-\1}\" #/" /home/suwayomi/.local/share/Tachidesk/server.conf
-sed -i -r "s/server.koreaderSyncUserkey = \"(.*?)\"( #)?/server.koreaderSyncUserkey = \"${KOREADER_SYNC_USERKEY:-\1}\" #/" /home/suwayomi/.local/share/Tachidesk/server.conf
-sed -i -r "s/server.koreaderSyncDeviceId = \"(.*?)\"( #)?/server.koreaderSyncDeviceId = \"${KOREADER_SYNC_DEVICE_ID:-\1}\" #/" /home/suwayomi/.local/share/Tachidesk/server.conf
 sed -i -r "s/server.koreaderSyncChecksumMethod = \"*([a-zA-Z0-9_]+)\"*( #)?/server.koreaderSyncChecksumMethod = ${KOREADER_SYNC_CHECKSUM_METHOD:-\1} #/" /home/suwayomi/.local/share/Tachidesk/server.conf
 sed -i -r "s/server.koreaderSyncPercentageTolerance = ([-0-9\.Ee]+)?( #)/server.koreaderSyncPercentageTolerance = ${KOREADER_SYNC_PERCENTAGE_TOLERANCE:-\1} #/" /home/suwayomi/.local/share/Tachidesk/server.conf
 sed -i -r "s/server.koreaderSyncStrategyForward = \"*([a-zA-Z0-9_]+)\"*( #)?/server.koreaderSyncStrategyForward = ${KOREADER_SYNC_STRATEGY_FORWARD:-\1} #/" /home/suwayomi/.local/share/Tachidesk/server.conf
@@ -125,6 +151,21 @@ sed -i -r "s/server.databaseType = \"*([a-zA-Z0-9_]+)\"*( #)?/server.databaseTyp
 sed -i -r "s|server.databaseUrl = \"(.*?)\"( #)?|server.databaseUrl = \"${DATABASE_URL:-\1}\" #|" /home/suwayomi/.local/share/Tachidesk/server.conf
 sed -i -r "s/server.databaseUsername = \"(.*?)\"( #)?/server.databaseUsername = \"${DATABASE_USERNAME:-\1}\" #/" /home/suwayomi/.local/share/Tachidesk/server.conf
 sed -i -r "s/server.databasePassword = \"(.*?)\"( #)?/server.databasePassword = \"${DATABASE_PASSWORD:-\1}\" #/" /home/suwayomi/.local/share/Tachidesk/server.conf
+sed -i -r "s/server.useHikariConnectionPool = ([0-9]+|[a-zA-Z]+)( #)?/server.useHikariConnectionPool = ${USE_HIKARI_CONNECTION_POOL:-\1} #/" /home/suwayomi/.local/share/Tachidesk/server.conf
+
+# webview
+sed -i -r "s/server.kcefEnabled = ([0-9]+|[a-zA-Z]+)( #)?/server.kcefEnabled = ${KCEF_ENABLED:-\1} #/" /home/suwayomi/.local/share/Tachidesk/server.conf
+
+# sync
+sed -i -r "s/server.syncYomiEnabled = ([0-9]+|[a-zA-Z]+)( #)?/server.syncYomiEnabled = ${SYNCYOMI_ENABLED:-\1} #/" /home/suwayomi/.local/share/Tachidesk/server.conf
+sed -i -r "s|server.syncYomiHost = \"(.*?)\"( #)?|server.syncYomiHost = \"${SYNCYOMI_HOST:-\1}\" #|" /home/suwayomi/.local/share/Tachidesk/server.conf
+sed -i -r "s|server.syncYomiApiKey = \"(.*?)\"( #)?|server.syncYomiApiKey = \"${SYNCYOMI_API_KEY:-\1}\" #|" /home/suwayomi/.local/share/Tachidesk/server.conf
+sed -i -r "s/server.syncDataManga = ([0-9]+|[a-zA-Z]+)( #)?/server.syncDataManga = ${SYNC_DATA_MANGA:-\1} #/" /home/suwayomi/.local/share/Tachidesk/server.conf
+sed -i -r "s/server.syncDataChapters = ([0-9]+|[a-zA-Z]+)( #)?/server.syncDataChapters = ${SYNC_DATA_CHAPTERS:-\1} #/" /home/suwayomi/.local/share/Tachidesk/server.conf
+sed -i -r "s/server.syncDataTracking = ([0-9]+|[a-zA-Z]+)( #)?/server.syncDataTracking = ${SYNC_DATA_TRACKING:-\1} #/" /home/suwayomi/.local/share/Tachidesk/server.conf
+sed -i -r "s/server.syncDataHistory = ([0-9]+|[a-zA-Z]+)( #)?/server.syncDataHistory = ${SYNC_DATA_HISTORY:-\1} #/" /home/suwayomi/.local/share/Tachidesk/server.conf
+sed -i -r "s/server.syncDataCategories = ([0-9]+|[a-zA-Z]+)( #)?/server.syncDataCategories = ${SYNC_DATA_CATEGORIES:-\1} #/" /home/suwayomi/.local/share/Tachidesk/server.conf
+sed -i -r "s/server.syncInterval = \"(.*?)\"( #)?/server.syncInterval = \"${SYNC_INTERVAL:-\1}\" #/" /home/suwayomi/.local/share/Tachidesk/server.conf
 
 rm -rf /home/suwayomi/.local/share/Tachidesk/cache/kcef/Singleton*
 
@@ -136,6 +177,7 @@ if command -v Xvfb >/dev/null; then
       mkdir -p /home/suwayomi/.local/share/Tachidesk/bin
     fi
     if [ ! -d /home/suwayomi/.local/share/Tachidesk/bin/kcef ] && [ ! -L /home/suwayomi/.local/share/Tachidesk/bin/kcef ]; then
+      rm -rf /home/suwayomi/.local/share/Tachidesk/bin/kcef
       ln -s /opt/kcef/jcef /home/suwayomi/.local/share/Tachidesk/bin/kcef
     fi
   fi
