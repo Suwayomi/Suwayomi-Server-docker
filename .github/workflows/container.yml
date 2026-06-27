@@ -150,7 +150,7 @@ jobs:
             -e AUTO_DOWNLOAD_IGNORE_REUPLOADS=false \
             -e DOWNLOAD_CONVERSIONS="{ \"image/filetype\" = { target = \"image/filetype\" }, \"image/filetype\" = { target = \"image/filetype\" } }" \
             -e SERVE_CONVERSIONS="{ \"image/filetype\" = { target = \"image/filetype\" }, \"image/filetype\" = { target = \"image/filetype\" } }" \
-            -e EXTENSION_REPOS=[\"http://github.com/orginazation-name/repo-name\",\"http://github.com/orginazation-name-2/repo-name-2\"] \
+            -e EXTENSION_STORES=[\"https://raw.githubusercontent.com/orginazation-name/repo-name/repo/index.min.json\",\"https://raw.githubusercontent.com/orginazation-name-2/repo-name-2/repo/index.min.json\"] \
             -e MAX_SOURCES_IN_PARALLEL=12 \
             -e UPDATE_EXCLUDE_UNREAD=false \
             -e UPDATE_EXCLUDE_STARTED=false \
