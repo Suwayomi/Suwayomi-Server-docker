@@ -25,7 +25,7 @@ services:
 #      - AUTH_MODE=basic_auth
 #      - AUTH_USERNAME=manga
 #      - AUTH_PASSWORD=hello123
-#      - EXTENSION_REPOS=["http://github.com/orginazation-name/repo-name", "http://github.com/orginazation-name-2/repo-name-2"]
+#      - EXTENSION_STORES=["https://raw.githubusercontent.com/MY_ACCOUNT/MY_EXTENSION_STORE/repo/index.min.json", "https://raw.githubusercontent.com/MY_ACCOUNT_2/MY_REPO_2/repo/index.pb"]
     volumes:
       - ./data:/home/suwayomi/.local/share/Tachidesk
     ports:

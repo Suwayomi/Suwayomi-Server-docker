@@ -71,9 +71,9 @@ if [ -n "$SERVE_CONVERSIONS" ]; then
     perl -0777 -i -pe 's/server\.serveConversions = ({[^#]*?}}?)/server.serveConversions = $ENV{SERVE_CONVERSIONS}/gs' /home/suwayomi/.local/share/Tachidesk/server.conf
 fi
 
-# extension repos
-if [ -n "$EXTENSION_REPOS" ]; then
-    perl -0777 -i -pe 's/server\.extensionRepos = (\[.*?\])/server.extensionRepos = $ENV{EXTENSION_REPOS}/gs' /home/suwayomi/.local/share/Tachidesk/server.conf
+# extension stores
+if [ -n "$EXTENSION_STORES" ]; then
+    perl -0777 -i -pe 's/server\.extensionStores = (\[.*?\])/server.extensionStores = $ENV{EXTENSION_STORES}/gs' /home/suwayomi/.local/share/Tachidesk/server.conf
 fi
 
 # requests
