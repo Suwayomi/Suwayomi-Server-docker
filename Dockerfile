@@ -60,6 +60,8 @@ RUN userdel -r ubuntu && \
 
 COPY scripts/create_server_conf.sh /home/suwayomi/create_server_conf.sh
 COPY scripts/startup_script.sh /home/suwayomi/startup_script.sh
+# the entrypoint runs as root, so keep it outside of the world-writable /home/suwayomi
+COPY scripts/docker_entrypoint.sh /usr/local/bin/docker_entrypoint.sh
 
 ARG TACHIDESK_RELEASE_DOWNLOAD_URL
 # Copy the app into the container
@@ -67,6 +69,7 @@ ARG TACHIDESK_RELEASE_DOWNLOAD_URL
 # we grant o+rwx because we need to allow non default UIDs (eg via docker run ... --user)
 # to write to the directory to generate the server.conf
 RUN curl -s --create-dirs -L $TACHIDESK_RELEASE_DOWNLOAD_URL -o /home/suwayomi/startup/tachidesk_latest.jar && \
+    chmod 755 /usr/local/bin/docker_entrypoint.sh && \
     chmod 777 -R /home/suwayomi && \
     chown -R suwayomi:suwayomi /home/suwayomi
 
@@ -91,10 +94,14 @@ LABEL maintainer="suwayomi" \
 
 ENV HOME=/home/suwayomi
 WORKDIR /home/suwayomi
-USER suwayomi
+# No USER here: the container starts as root and docker_entrypoint.sh remaps
+# the suwayomi user to PUID/PGID (default 1000:1000), fixes the ownership of
+# the data directory and then drops privileges before starting the server.
+# Starting the container with an explicit user (eg docker run --user) skips
+# the remapping and runs the server directly as that user, like it used to.
 EXPOSE 4567
 
-ENTRYPOINT ["tini", "--"]
+ENTRYPOINT ["tini", "--", "/usr/local/bin/docker_entrypoint.sh"]
 CMD ["/home/suwayomi/startup_script.sh"]
 
 # vim: set ft=dockerfile:
