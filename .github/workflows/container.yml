@@ -121,6 +121,8 @@ jobs:
           mkdir -p ${{ runner.temp }}/tachidesk_env_vars
           chmod -R 777 ${{ runner.temp }}/tachidesk_env_vars
           docker run -d -p 127.0.0.1:4568:4567 -v ${{ runner.temp }}/tachidesk_env_vars:/home/suwayomi/.local/share/Tachidesk \
+            -e PUID=1050 \
+            -e PGID=1050 \
             -e BIND_IP=0.0.0.0 \
             -e BIND_PORT=4567 \
             -e SOCKS_PROXY_ENABLED=false \
@@ -205,6 +207,8 @@ jobs:
             ${{ env.test_image_tag }}
           sleep 15
           curl -s http://manga:hello123@127.0.0.1:4568/api/v1/settings/about/ && val_env_vars=$(curl -s http://manga:hello123@127.0.0.1:4568/api/v1/settings/about/ | grep -o "Suwayomi-Server" | sort --unique)
+          # server.conf is created by the server side of the PUID/PGID privilege drop, so its owner shows the UID/GID the server ran as
+          data_owner=$(docker exec suwayomi_test stat -c '%u:%g' /home/suwayomi/.local/share/Tachidesk/server.conf || echo "docker exec failed")
           docker stop suwayomi_test
           docker logs suwayomi_test > ${{ runner.temp }}/tachidesk_env_vars.log
           docker rm suwayomi_test
@@ -214,6 +218,20 @@ jobs:
             cat ${{ runner.temp }}/tachidesk_env_vars.log
             echo "=============================="
             echo "Did not find Suwayomi-Server in server response: ${val_env_vars}"
+            if [[ $DO_UPLOAD == "true" ]]; then
+                curl \
+                  -F 'payload_json={"username": "Github", "content": "<@199705443789045771>\nDocker ${{ inputs.tachidesk_release_type }} image dry run failed! 😢 Version - ${{ steps.get_latest_release_metadata.outputs.release_tag }}. [See the full run log](${{ env.this_actions_run_url }})"}' \
+                  -F "file1=@${{ runner.temp }}/tachidesk_env_vars.log" \
+                  "https://discord.com/api/webhooks/${{ secrets.DISCORD_TACHIDESK_WEBHOOK_ID }}/${{ secrets.DISCORD_TACHIDESK_TOKEN }}"
+            fi
+            exit 1
+          fi
+          if [[ $data_owner != "1050:1050" ]]; then
+            echo "Container logs:"
+            echo "=============================="
+            cat ${{ runner.temp }}/tachidesk_env_vars.log
+            echo "=============================="
+            echo "PUID/PGID remapping failed: server.conf is owned by '${data_owner}', expected '1050:1050'"
             if [[ $DO_UPLOAD == "true" ]]; then
                 curl \
                   -F 'payload_json={"username": "Github", "content": "<@199705443789045771>\nDocker ${{ inputs.tachidesk_release_type }} image dry run failed! 😢 Version - ${{ steps.get_latest_release_metadata.outputs.release_tag }}. [See the full run log](${{ env.this_actions_run_url }})"}' \
