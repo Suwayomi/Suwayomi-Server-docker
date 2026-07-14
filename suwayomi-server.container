@@ -5,6 +5,13 @@ Environment=TZ=Etc/UTC # Use TZ database name from https://en.wikipedia.org/wiki
 Image=ghcr.io/suwayomi/suwayomi-server:preview
 PublishPort=4567:4567
 
+# Environment=PUID=1000
+# Environment=PGID=1000
+# The container starts as (namespaced) root and drops to PUID/PGID, default 1000:1000.
+# With UserNS=keep-id below and a host UID of 1000 the defaults are already correct;
+# if your host user has a different UID/GID, set PUID/PGID to it so that the server
+# runs as the container UID that keep-id maps to your host user.
+
 UserNS=keep-id
 # Without UserNS=keep-id, the container's UID 1000 would map to a diffferent host UID which probably doesn't own the bind-mounted directory below
 
