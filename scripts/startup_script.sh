@@ -194,4 +194,5 @@ if [ -f /opt/catch_abort.so ]; then
   export LD_PRELOAD="/opt/catch_abort.so $LD_PRELOAD"
 fi
 echo "LD_PRELOAD=$LD_PRELOAD"
+export DBUS_SESSION_BUS_ADDRESS="disabled:"
 exec $command -Duser.home=/home/suwayomi -jar "/home/suwayomi/startup/tachidesk_latest.jar";
