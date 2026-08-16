@@ -63,7 +63,6 @@ services:
   flaresolverr:
     image: ghcr.io/thephaseless/byparr:latest
     container_name: flaresolverr
-    init: true
     environment:
       - TZ=${TZ:-Etc/UTC}
     restart: unless-stopped
