@@ -22,7 +22,7 @@ if [ -f "${BASIC_AUTH_PASSWORD_FILE}" ]; then
     export BASIC_AUTH_PASSWORD=$(cat "${BASIC_AUTH_PASSWORD_FILE}")
 fi
 if [ -f "${DATABASE_PASSWORD_FILE}" ]; then
-    export DATABASE_PASSWORD=$(cat "${DATABSE_PASSWORD_FILE}")
+    export DATABASE_PASSWORD=$(cat "${DATABASE_PASSWORD_FILE}")
 fi
 if [ -f "${SYNCYOMI_API_KEY_FILE}" ]; then
     export SYNCYOMI_API_KEY=$(cat "${SYNCYOMI_API_KEY_FILE}")
