@@ -3,7 +3,6 @@ services:
   suwayomi:
     image: ghcr.io/suwayomi/suwayomi-server:preview
     # user: 1000:1000
-    shm_size: 1g
     environment:
       - TZ=${TZ:-Etc/UTC} # Add a TZ variable to .env to change it
       - DATABASE_TYPE=POSTGRESQL
@@ -54,6 +53,7 @@ services:
     volumes:
       - ./postgres:/data/postgres
     restart: unless-stopped
+    shm_size: 1g
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -d ${POSTGRES_DB} -U ${POSTGRES_USER}"]
       interval: 10s
