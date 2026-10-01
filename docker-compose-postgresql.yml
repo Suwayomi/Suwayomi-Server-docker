@@ -3,6 +3,7 @@ services:
   suwayomi:
     image: ghcr.io/suwayomi/suwayomi-server:preview
     # user: 1000:1000
+    shm_size: 1g
     environment:
       - TZ=${TZ:-Etc/UTC} # Add a TZ variable to .env to change it
       - DATABASE_TYPE=POSTGRESQL
