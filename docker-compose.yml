@@ -2,9 +2,14 @@
 services:
   suwayomi:
     image: ghcr.io/suwayomi/suwayomi-server:preview
+    # Forcing the container user disables the PUID/PGID remapping below; the data
+    # directory must then already be writable by that user. Prefer PUID/PGID.
     # user: 1000:1000
     environment:
       - TZ=Etc/UTC # Use TZ database name from https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
+      # UID/GID to run the server as; the data directory ownership is updated to match (default 1000:1000)
+      # - PUID=1000
+      # - PGID=1000
       # Comment these out if you do not use the flaresolverr container at the bottom of this file
       - FLARESOLVERR_ENABLED=true
       - FLARESOLVERR_URL=http://flaresolverr:8191

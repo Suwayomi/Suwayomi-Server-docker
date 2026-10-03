@@ -2,9 +2,14 @@
 services:
   suwayomi:
     image: ghcr.io/suwayomi/suwayomi-server:preview
+    # Forcing the container user disables the PUID/PGID remapping below; the data
+    # directory must then already be writable by that user. Prefer PUID/PGID.
     # user: 1000:1000
     environment:
       - TZ=${TZ:-Etc/UTC} # Add a TZ variable to .env to change it
+      # UID/GID to run the server as; the data directory ownership is updated to match (default 1000:1000)
+      # - PUID=1000
+      # - PGID=1000
       - DATABASE_TYPE=POSTGRESQL
       - DATABASE_URL=postgresql://postgresql:5432/${POSTGRES_DB}
       - DATABASE_USERNAME=${POSTGRES_USER}
