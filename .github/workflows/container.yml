@@ -168,7 +168,9 @@ jobs:
             -e DATABASE_URL=postgresql://localhost:5432/suwayomi \
             -e DATABASE_USERNAME=manga \
             -e DATABASE_PASSWORD=hello123 \
+            -e DATABASE_SCHEMA=yay_schema \
             -e USE_HIKARI_CONNECTION_POOL=false \
+            -e HIKARI_MAX_POOL_SIZE=10 \
             -e KCEF_ENABLED=false \
             --name=suwayomi_test \
             ${{ env.test_image_tag }}

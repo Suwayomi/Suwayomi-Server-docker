@@ -122,7 +122,9 @@ sed -i -r "s/server.databaseType = \"*([a-zA-Z0-9_]+)\"*( #)?/server.databaseTyp
 sed -i -r "s|server.databaseUrl = \"(.*?)\"( #)?|server.databaseUrl = \"${DATABASE_URL:-\1}\" #|" /home/suwayomi/.local/share/Tachidesk/server.conf
 sed -i -r "s/server.databaseUsername = \"(.*?)\"( #)?/server.databaseUsername = \"${DATABASE_USERNAME:-\1}\" #/" /home/suwayomi/.local/share/Tachidesk/server.conf
 sed -i -r "s/server.databasePassword = \"(.*?)\"( #)?/server.databasePassword = \"${DATABASE_PASSWORD:-\1}\" #/" /home/suwayomi/.local/share/Tachidesk/server.conf
+sed -i -r "s/server.databaseSchema = \"(.*?)\"( #)?/server.databaseSchema = \"${DATABASE_SCHEMA:-\1}\" #/" /home/suwayomi/.local/share/Tachidesk/server.conf
 sed -i -r "s/server.useHikariConnectionPool = ([0-9]+|[a-zA-Z]+)( #)?/server.useHikariConnectionPool = ${USE_HIKARI_CONNECTION_POOL:-\1} #/" /home/suwayomi/.local/share/Tachidesk/server.conf
+sed -i -r "s/server.hikariMaxPoolSize = ([0-9]+|[a-zA-Z]+)( #)?/server.hikariMaxPoolSize = ${HIKARI_MAX_POOL_SIZE:-\1} #/" /home/suwayomi/.local/share/Tachidesk/server.conf
 
 # webview
 sed -i -r "s/server.kcefEnabled = ([0-9]+|[a-zA-Z]+)( #)?/server.kcefEnabled = ${KCEF_ENABLED:-\1} #/" /home/suwayomi/.local/share/Tachidesk/server.conf
