@@ -132,7 +132,24 @@ sed -i -r "s/server.kcefEnabled = ([0-9]+|[a-zA-Z]+)( #)?/server.kcefEnabled = $
 rm -rf /home/suwayomi/.local/share/Tachidesk/cache/kcef/Singleton*
 
 if command -v Xvfb >/dev/null; then
-  command="xvfb-run --auto-servernum java"
+  # Xvfb is started here and java exec'd below, instead of going through xvfb-run, so that java is tini's direct child.
+  # xvfb-run's shell dies on the container's stop signal right away, tini exits with it, and the kernel then kills java
+  # before it could shut down (close the database, ...).
+  # -displayfd picks a free display, like xvfb-run's --auto-servernum, and writes it once Xvfb accepts connections.
+  display_file="$(mktemp)"
+  Xvfb -displayfd 3 -screen 0 1280x1024x24 -nolisten tcp 3>"$display_file" >/dev/null 2>&1 &
+  tries=0
+  while [ ! -s "$display_file" ] && [ "$tries" -lt 100 ]; do
+    sleep 0.1
+    tries=$((tries + 1))
+  done
+  if [ -s "$display_file" ]; then
+    export DISPLAY=":$(cat "$display_file")"
+  else
+    echo "Xvfb did not start, the WebView will not work"
+  fi
+  rm -f "$display_file"
+
   if [ -d /opt/kcef/jcef ]; then
     # if we have KCEF downloaded in the container, attempt to link it into the data directory where Suwayomi expects it
     if [ ! -d /home/suwayomi/.local/share/Tachidesk/bin ]; then
@@ -150,7 +167,6 @@ if command -v Xvfb >/dev/null; then
   fi
   export LD_PRELOAD=/home/suwayomi/.local/share/Tachidesk/bin/kcef/libcef.so
 else
-  command="java"
   echo "Suwayomi built without KCEF support, not starting Xvfb"
 fi
 if [ -f /opt/catch_abort.so ]; then
@@ -158,4 +174,4 @@ if [ -f /opt/catch_abort.so ]; then
 fi
 echo "LD_PRELOAD=$LD_PRELOAD"
 export DBUS_SESSION_BUS_ADDRESS="disabled:"
-exec $command -Duser.home=/home/suwayomi -jar "/home/suwayomi/startup/tachidesk_latest.jar";
+exec java -Duser.home=/home/suwayomi -jar "/home/suwayomi/startup/tachidesk_latest.jar";
